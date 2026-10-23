@@ -3,6 +3,7 @@ export const profile = {
   title: 'Field Application Engineer · Automatyka przemysłowa',
   summary: 'Specjalizuję się w aplikacjach automatyki przemysłowej: PLC, HMI, SCADA, sterowaniu ruchem i napędach. Łączę logikę sterownika z pracą maszyny, układami wykonawczymi i interfejsem operatora. Narzędzia IT wykorzystuję do integracji danych, wizualizacji i automatyzacji testów.',
   github: 'https://github.com/PatrykChoinski',
+  linkedin: 'https://www.linkedin.com/in/patryk-choinski',
   email: 'patryk@choinski.net.pl',
   phone: '+48 696 568 545',
 };
