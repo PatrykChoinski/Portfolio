@@ -1,4 +1,5 @@
 import {test,expect} from '@playwright/test';
+import {fileURLToPath} from 'node:url';
 const production='https://patrykchoinski.github.io/Portfolio/';
 test('clean layout, full portrait and sticky navigation on desktop and mobile',async({page})=>{
  for(const width of [1280,390]){
@@ -22,7 +23,7 @@ test('production HTML contains project content and SEO even without JavaScript',
 test('GA4 loads only after consent, sends one pageview and useful events without search/contact data',async({page})=>{
  let tagLoads=0;
  await page.route('https://www.googletagmanager.com/**',route=>{tagLoads++;return route.fulfill({contentType:'text/javascript',body:'/* mocked Google tag: no production data transmitted */'});});
- await page.route(production+'**',async route=>{const path=new URL(route.request().url()).pathname.slice('/Portfolio/'.length);const response=await page.request.get('http://127.0.0.1:4173/'+path);await route.fulfill({response});});
+ await page.route(production+'**',route=>{const path=new URL(route.request().url()).pathname.slice('/Portfolio/'.length);return route.fulfill({path:fileURLToPath(new URL('../../dist/'+(path||'index.html'),import.meta.url))});});
  await page.addInitScript(()=>document.addEventListener('click',event=>{const a=event.target.closest('a');if(a&&(/^(mailto:|tel:)/.test(a.getAttribute('href'))||a.getAttribute('download')!==null))event.preventDefault();}));
  await page.goto(production+'?email=private@example.com&utm_source=linkedin');
  await expect(page.getByRole('button',{name:'Zgadzam się na statystyki'})).toBeVisible();expect(tagLoads).toBe(0);
@@ -40,4 +41,5 @@ test('GA4 loads only after consent, sends one pageview and useful events without
  await page.getByRole('button',{name:'Ustawienia statystyk',exact:true}).click();await page.getByRole('button',{name:'Bez statystyk',exact:true}).click();await expect(page.locator('.consent-panel')).toBeHidden();
  expect(await page.evaluate(()=>localStorage.getItem('portfolio-analytics-consent-v1'))).toBe('denied');
  await page.reload();expect(tagLoads).toBe(2);
+ await page.unrouteAll({behavior:'wait'});
 });
