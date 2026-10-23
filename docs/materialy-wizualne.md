@@ -34,3 +34,5 @@ Sprzęt pokazano jako pięć przykładowych fotografii kategorii PLC, serwonapę
 Panel Actions odtwarza wybrane etapy publicznych przebiegów CODESYS CI: #21 z 22.09.2026 (powodzenie) i #24 z 24.09.2026 (błąd kompilacji). Nazwy etapów, ich wyniki i czasy pochodzą z GitHub API. Wizualizacja skraca czas i nie inicjuje nowego wykonania ani połączenia z PLC. Linki do źródłowych przebiegów są w danych publicznych. Nie kopiowano surowych logów ani danych środowiska runnera.
 
 Usunięto karty energii i wizualizacji przeglądarkowej; animacja 3D pozostaje w sekcji aplikacji w działaniu.
+
+Dodano zdjęcie regulatora temperatury DTM (DTME04) ze strony InduProgress: https://induprogress.pl/produkt/dtme04/. Lokalny plik: public/equipment/temperature-controller.jpg. Podpis pozostaje ogólny, bez nazwy modelu. Kompetencję regulacji PID i histerezy dodano na podstawie deklaracji właściciela portfolio z 23.10.2026.

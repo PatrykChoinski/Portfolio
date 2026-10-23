@@ -15,7 +15,7 @@ function render() {
 }
 filters.addEventListener('click',e=>{const button=e.target.closest('button');if(!button)return;category=button.dataset.category;filters.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));render();});
 document.querySelector('#search').addEventListener('input',render);
-const skillCard=(s,i)=>`<article class="skill"><span class="skill-number">${String(i+1).padStart(2,'0')}</span><h3>${escape(s.group)}</h3><p>${escape(s.description)}</p><div class="tags">${s.items.map(t=>`<span>${escape(t)}</span>`).join('')}</div><small>${escape(s.type)}</small></article>`;
+const skillCard=(s,i)=>`<article class="skill"><span class="skill-number">${String(i+1).padStart(2,'0')}</span><h3>${escape(s.group)}</h3><p>${escape(s.description)}</p>${s.area==='support'?`<div class="tags">${s.items.map(t=>`<span>${escape(t)}</span>`).join('')}</div>`:''}<small>${escape(s.type)}</small></article>`;
 document.querySelector('#skills').innerHTML=skills.filter(s=>s.area!=='support').map(skillCard).join('');
 if(!document.querySelector('.support-area')) document.querySelector('#skills').insertAdjacentHTML('afterend',`<div class="support-area"><p class="eyebrow">KOMPETENCJE UZUPEŁNIAJĄCE</p><h3>IT jako wsparcie automatyki.</h3><p class="support-intro">Wizualizacja, integracje i automatyczne testy pomagają mi rozwijać aplikacje przemysłowe.</p><div id="support-skills" class="skills-grid">${skills.filter(s=>s.area==='support').map(skillCard).join('')}</div></div>`);
 const dialog=document.querySelector('#project-dialog');
