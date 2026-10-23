@@ -26,3 +26,11 @@ Opisy udziału dotyczą aplikacji sterowania i wskazanych projektów. Nie utożs
 ## Sprzęt automatyki
 
 Sześć zdjęć w `public/equipment/` pochodzi z katalogu dystrybutora. Dokładne adresy stron produktów zapisano w `equipment` w `src/data.mjs`. Kontrolery AX opisano jako oparte na CODESYS; napędy, HMI i SCADA jako urządzenia oraz oprogramowanie współpracujące. Funkcje zależne od wariantu i licencji są tak oznaczone. Galerię maszyn połączono z opisami projektów; usunięto widoczne oznaczenia modeli zgodnie z poleceniem właściciela.
+
+## Uproszczenie prezentacji i Actions
+
+Sprzęt pokazano jako pięć przykładowych fotografii kategorii PLC, serwonapęd, falownik, HMI i SCADA, bez nazw modeli i katalogowego przeglądu. Sekcja komunikacji korzysta z lokalnych plików logotypów; źródła zapisano przy każdym wpisie `protocols` w `src/data.mjs`. Modbus TCP i RTU wykorzystują ten sam logotyp z osobnym oznaczeniem wariantu.
+
+Panel Actions odtwarza wybrane etapy publicznych przebiegów CODESYS CI: #21 z 22.09.2026 (powodzenie) i #24 z 24.09.2026 (błąd kompilacji). Nazwy etapów, ich wyniki i czasy pochodzą z GitHub API. Wizualizacja skraca czas i nie inicjuje nowego wykonania ani połączenia z PLC. Linki do źródłowych przebiegów są w danych publicznych. Nie kopiowano surowych logów ani danych środowiska runnera.
+
+Usunięto karty energii i wizualizacji przeglądarkowej; animacja 3D pozostaje w sekcji aplikacji w działaniu.
