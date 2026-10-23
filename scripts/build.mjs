@@ -1,3 +1,4 @@
+import {refreshGithubActivity} from './github-activity.mjs';
 import { mkdir, cp, readFile, writeFile } from 'node:fs/promises';
 import { generateCvHtml } from './cv-template.mjs';
 import {seoHead,privacyPage,reportsPage,sitemap} from './site-template.mjs';
@@ -9,6 +10,7 @@ await mkdir('dist', {recursive:true});
 await cp('index.html','dist/index.html');
 await cp('src','dist/src',{recursive:true});
 await cp('public','dist/public',{recursive:true});
+await refreshGithubActivity();
 await mkdir('dist/public/vendor',{recursive:true});
 await cp('node_modules/web-vitals/dist/web-vitals.js','dist/public/vendor/web-vitals.js');
 await cp('node_modules/web-vitals/LICENSE','dist/public/vendor/web-vitals-LICENSE.txt');

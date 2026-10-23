@@ -115,3 +115,5 @@ export const portfolioScreenshots = [
  {id:'plc-library',title:'Struktura aplikacji PLC',src:'./public/screenshots/plc-library-redacted.png',alt:'Zanonimizowany zrzut edytora PLC z drzewem folderów i kodem Structured Text',caption:'Rzeczywisty widok biblioteki sterowania. Kod jest widoczny. Folder Buffor i jego zawartość są czytelne; nazwy pozostałych folderów zostały zamazane.'},
  {id:'scada-screen',title:'Trendy i raporty procesu',src:'./public/screenshots/scada-trends.png',alt:'Zrzut aplikacji SCADA z trendami i wyborem sygnałów',caption:'Rzeczywisty ekran aplikacji SCADA: trendy procesu i wybór sygnałów.'}
 ];
+
+export const githubProfile={username:'PatrykChoinski',activityUrl:'https://github.com/PatrykChoinski?tab=overview',repositories:[{name:'Portfolio',title:'Portfolio'},{name:'Promasz-Visu3D',title:'Wizualizacja maszyny 3D'},{name:'Codesys-CI-CD',title:'Automatyczne testy PLC'}]};
