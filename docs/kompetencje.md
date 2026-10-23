@@ -8,20 +8,22 @@ Ocena na podstawie starego CV, lokalnych projektów oraz dostępnych repozytori�
 2. **Motion Control:** pozycjonowanie, bazowanie osi, ruchy ręczne i automatyczne, interpolacja oraz profile ruchu w aplikacjach obróbczych.
 3. **Napędy:** serwonapędy Delta, falowniki, enkodery oraz narzędzia ASDASOFT i VFDSoft. Podstawa: dokumentacja aplikacji maszyny do obróbki kamienia.
 4. **HMI:** DIAScreen, panele Delta, obsługa trybów pracy i parametrów maszyny; osobna aplikacja operatorska powiązana z PLC.
-5. **SCADA:** DIAView, KingSCADA, KingView, dane historyczne, receptury, trendy i raporty, SQL Server i PostgreSQL. Duży zakres pracy z obiema bazami potwierdzony przez właściciela portfolio 23.10.2026.
+5. **SCADA:** DIAView, KingSCADA, KingView, dane historyczne, receptury, trendy i raporty.
 6. **Robotyka i układy wykonawcze:** roboty Delta i Fanuc, pneumatyka, układy elektryczne, EPLAN i SEE Electrical. Podstawa: CV.
-7. **Integracje przemysłowe:** OPC UA, Node-RED, pomiary energii, dashboardy i alarmy.
+7. **Integracje przemysłowe:** EtherCAT, CANopen, EtherNet/IP, Modbus TCP, Modbus RTU, OPC UA i Node-RED. Protokoły potwierdzone przez właściciela portfolio.
 
 Obszary aplikacji wymienione w CV: obróbka kamienia i drewna, opakowania kartonowe, rolety, maszyny dla branży tytoniowej, mycie form wtryskowych, zgrzewanie i rolowanie worków oraz SCADA produkcji.
 
 ## Kompetencje uzupełniające
 
-JavaScript, Node.js, Three.js i WebGL służą wizualizacji maszyny i danych. Python, PowerShell, Git i CI/CD wspierają tworzenie, testowanie i utrzymanie aplikacji przemysłowych. Nie są głównym profilem zawodowym właściciela portfolio.
+SQL Server i PostgreSQL: częste wykorzystanie baz danych potwierdzone przez właściciela 23.10.2026. Claude, Codex i AI: narzędzia wspomagające pracę, wskazane przez właściciela.
+
+JavaScript, Node.js, WebGL służą wizualizacji maszyny i danych. Python, PowerShell, Git i CI/CD wspierają tworzenie, testowanie i utrzymanie aplikacji przemysłowych. Nie są głównym profilem zawodowym właściciela portfolio.
 
 | Obszar | Technologie | Podstawa |
 | --- | --- | --- |
 | Programowanie PLC i sterowanie ruchem | Structured Text, CODESYS, DIADesigner-AX, SoftMotion, Delta, Mitsubishi PLC | CV, dokumentacja PLC i pipeline budowania projektów |
-| Frontend i wizualizacja 3D | JavaScript, HTML, CSS, Three.js, WebGL | Dokumentacja i konfiguracja aplikacji wizualizacji maszyny |
+| Frontend i wizualizacja 3D | JavaScript, HTML, CSS, WebGL | Dokumentacja i konfiguracja aplikacji wizualizacji maszyny |
 | Backend i komunikacja | Node.js, OPC UA, SSE | Architektura aplikacji wizualizacji maszyny |
 | Programowanie przepływowe i IoT | Node-RED, dashboardy, alarmy, OPC UA | Publiczny projekt pomiarów energii |
 | SCADA i bazy danych | DIAView, KingSCADA, KingView, SQL, SQL Server, SQLite | CV, dokumentacja SCADA i skrypty eksportu danych |

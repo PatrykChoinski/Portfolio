@@ -7,10 +7,10 @@ test('automation comes first and all photos and application logos load',async({p
  await expect(page.locator('h1')).toContainText('Automatyka');
  await expect(page.locator('#automatyka .application-grid>div')).toHaveCount(8);
  await expect(page.locator('#skills .skill')).toHaveCount(7);
- await expect(page.locator('#support-skills .skill')).toHaveCount(2);
+ await expect(page.locator('#support-skills .skill')).toHaveCount(4);
  await expect(page.locator('#projects .project-card').first()).toContainText('Czyszczenie i diagnostyka kanałów form');
- await expect(page.locator('.machine-photo-card')).toHaveCount(6);
- await expect(page.locator('.technology-logo')).toHaveCount(12);
+ await expect(page.locator('#projects .project-art.has-photo')).toHaveCount(6);
+ await expect(page.locator('.technology-logo')).toHaveCount(11);
  await expect(page.locator('.hero-portrait')).toHaveAttribute('alt','Patryk Choiński');
  for(const image of await page.locator('img').all()){
   await image.scrollIntoViewIfNeeded();
@@ -46,3 +46,5 @@ test('SCADA signals, batch comparison and time cursor respond; animation contain
  await page.getByRole('button',{name:'Uruchom pełny symulator tutaj ↗'}).click();
  await expect(page.locator('.simulator-frame')).toHaveAttribute('src','https://patrykchoinski.github.io/Promasz-Visu3D/');
 });
+
+test('merged projects, IT databases and automation equipment remain in their intended sections',async({page})=>{await page.goto('/');await expect(page.locator('#maszyny')).toHaveCount(0);await expect(page.locator('#skills')).not.toContainText('SQL Server');await expect(page.locator('#skills')).not.toContainText('PostgreSQL');await expect(page.locator('#support-skills')).toContainText('SQL Server');await expect(page.locator('#support-skills')).toContainText('PostgreSQL');await expect(page.locator('#support-skills')).toContainText('Claude');await expect(page.locator('#support-skills')).toContainText('Codex');await expect(page.locator('body')).not.toContainText('Three.js');await expect(page.locator('#projects')).not.toContainText('4000');await expect(page.locator('.equipment-card')).toHaveCount(6);await expect(page.locator('.protocol-grid article')).toHaveCount(6);});

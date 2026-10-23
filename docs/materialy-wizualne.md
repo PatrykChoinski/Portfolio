@@ -22,3 +22,7 @@ Materiały producentów i logotypy zachowują prawa ich właścicieli; pobranie 
 - SQL Server i PostgreSQL: kompetencje potwierdzone bezpośrednio przez właściciela 23.10.2026; oryginalne logotypy z Devicon.
 
 Opisy udziału dotyczą aplikacji sterowania i wskazanych projektów. Nie utożsamiają udziału właściciela portfolio z autorstwem całej maszyny lub całej aplikacji zespołowej.
+
+## Sprzęt automatyki
+
+Sześć zdjęć w `public/equipment/` pochodzi z katalogu dystrybutora. Dokładne adresy stron produktów zapisano w `equipment` w `src/data.mjs`. Kontrolery AX opisano jako oparte na CODESYS; napędy, HMI i SCADA jako urządzenia oraz oprogramowanie współpracujące. Funkcje zależne od wariantu i licencji są tak oznaczone. Galerię maszyn połączono z opisami projektów; usunięto widoczne oznaczenia modeli zgodnie z poleceniem właściciela.
