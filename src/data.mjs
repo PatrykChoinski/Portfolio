@@ -3,9 +3,11 @@ export const profile = {
   title: 'Automatyka przemysłowa. Oprogramowanie. Integracje.',
   summary: 'Łączę świat maszyn z oprogramowaniem. Pracuję nad sterowaniem PLC, interfejsami operatora i aplikacjami, które pomagają zrozumieć proces — od danych ze sterownika po wizualizację 3D.',
   github: 'https://github.com/PatrykChoinski',
+  email: 'patryk@choinski.net.pl',
+  phone: '+48 696 568 545',
 };
 export const experience = [
-  {period:'Od 03.2020 · dane z CV z 2023 r.',role:'Field Application Engineer',company:'Firma z branży automatyki przemysłowej',description:'Tworzenie aplikacji PLC, HMI i motion dla maszyn do obróbki kamienia, opakowań, drewna i innych procesów przemysłowych. Integracja serwonapędów, falowników i pneumatyki.'},
+  {period:'03.2020 – obecnie',role:'Field Application Engineer',company:'Firma z branży automatyki przemysłowej',description:'Tworzenie aplikacji PLC, HMI i motion dla maszyn do obróbki kamienia, opakowań, drewna i innych procesów przemysłowych. Integracja serwonapędów, falowników i pneumatyki.'},
   {period:'10.2018 – 03.2020',role:'Technical Support Engineer',company:'Firma z branży automatyki przemysłowej',description:'Wsparcie techniczne w zakresie sterowników PLC, HMI, SCADA, napędów, kontrolerów ruchu i robotów Delta.'},
   {period:'07.2017 – 08.2017',role:'Staż inżynierski',company:'Firma z branży motoryzacyjnej',description:'Programowanie PLC Mitsubishi i robotów Fanuc oraz prace przy układach elektrycznych.'},
 ];

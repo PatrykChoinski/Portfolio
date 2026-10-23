@@ -1,4 +1,4 @@
-import { projects, skills, experience, filterProjects } from './data.mjs';
+import { profile, projects, skills, experience, filterProjects } from './data.mjs';
 const escape = s => String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let category = 'Wszystkie';
 const categories = ['Wszystkie', ...new Set(projects.map(p=>p.category))];
@@ -17,5 +17,6 @@ document.querySelector('#projects').addEventListener('click',e=>{const button=e.
 dialog.querySelector('.close').addEventListener('click',()=>dialog.close());
 dialog.addEventListener('click',e=>{if(e.target===dialog){const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)dialog.close();}});
 document.querySelector('#year').textContent=new Date().getFullYear();
+document.querySelector('#cv .actions').insertAdjacentHTML('afterend',`<p class="contact-details"><a href="mailto:${profile.email}">${profile.email}</a> &nbsp; / &nbsp; <a href="tel:+48696568545">${profile.phone}</a></p>`);
 document.querySelector('#cv').insertAdjacentHTML('beforebegin',`<section class="section experience-section"><div class="section-head"><div><p class="eyebrow">DOŚWIADCZENIE</p><h2>Praktyka inżynierska.</h2></div></div><div class="experience-grid">${experience.map(e=>`<article class="experience-item"><small>${escape(e.period)}</small><h3>${escape(e.role)}</h3><p class="card-sector">${escape(e.company)}</p><p>${escape(e.description)}</p></article>`).join('')}</div></section>`);
 render();

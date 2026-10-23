@@ -31,7 +31,7 @@ Testy obejmują filtrowanie, spójność CV z treścią strony, anonimizację, s
 
 Nie publikować oryginalnego CV ani dokumentacji klientów. Oryginalne PDF-y i `.local/` są ignorowane przez Git. Opisy bazują na dokumentacji i CV; nie przypisują autorstwa na podstawie samej obecności repozytorium. Dokładny zakres indywidualnej odpowiedzialności wymaga potwierdzenia właściciela.
 
-Ostatnie stanowisko podano według CV z 2023 roku, bez zakładania, że nadal trwa. Dane kontaktowe czekają na decyzję właściciela. Dostępne publiczne repozytoria organizacji nie zawierały opisów realizacji; wykorzystano projekty lokalne. Nie jest to przegląd wszystkich prywatnych repozytoriów organizacji.
+Aktualność stanowiska Field Application Engineer i publikację e-maila oraz telefonu właściciel potwierdził 23.10.2026. Wykształcenie i daty szkoleń pochodzą ze starego CV; ważności uprawnień nie zakłada się automatycznie. Przegląd objął projekty lokalne, publiczne repozytoria osobiste oraz 37 dostępnych repozytoriów powiązanego konta GitHub. Projektów z innym wskazanym autorem nie przypisano właścicielowi portfolio.
 
 ## Automatyczne wdrożenie
 
