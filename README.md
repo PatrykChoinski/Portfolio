@@ -29,6 +29,8 @@ Testy obejmują filtrowanie, spójność CV z treścią strony, anonimizację, s
 
 `src/data.mjs` zawiera profil, kompetencje, projekty, doświadczenie i wykształcenie. `scripts/cv-template.mjs` definiuje układ CV. Przed budowaniem `npm run cv` odtwarza HTML i PDF.
 
+Automatyka jest głównym obszarem portfolio: siedem grup kompetencji przemysłowych, osiem obszarów aplikacji oraz projekty PLC/HMI/motion na początku listy. Kompetencje IT mają osobną sekcję uzupełniającą. `src/data.mjs` zawiera też źródła zdjęć maszyn, portretu i logotypów. Pochodzenie materiałów opisuje `docs/materialy-wizualne.md`.
+
 Nie publikować oryginalnego CV ani dokumentacji klientów. Oryginalne PDF-y i `.local/` są ignorowane przez Git. Opisy bazują na dokumentacji i CV; nie przypisują autorstwa na podstawie samej obecności repozytorium. Dokładny zakres indywidualnej odpowiedzialności wymaga potwierdzenia właściciela.
 
 Aktualność stanowiska Field Application Engineer i publikację e-maila oraz telefonu właściciel potwierdził 23.10.2026. Wykształcenie i daty szkoleń pochodzą ze starego CV; ważności uprawnień nie zakłada się automatycznie. Przegląd objął projekty lokalne, publiczne repozytoria osobiste oraz 37 dostępnych repozytoriów powiązanego konta GitHub. Projektów z innym wskazanym autorem nie przypisano właścicielowi portfolio.
