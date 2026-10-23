@@ -1,5 +1,5 @@
 let youtube;
-function loadYouTube(){
+export function loadYouTube(){
  if(window.YT?.Player)return Promise.resolve(window.YT);
  return youtube ||= new Promise((resolve,reject)=>{
   const script=document.createElement('script');

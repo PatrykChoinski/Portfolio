@@ -18,7 +18,7 @@ test('automation comes first and all photos and application logos load',async({p
  }
  await expect(page.locator('.gallery-note')).toContainText('Fotografie producentów');
 });
-test('SCADA signals, batch comparison and time cursor respond; animation contains motion',async({page})=>{
+test('SCADA signals, batch comparison and time cursor respond; 3D demo offers video and simulator',async({page})=>{
  await page.goto('/');
  await page.locator('#scada-demo').scrollIntoViewIfNeeded();
  await expect(page.locator('.scada-plot')).toHaveCount(4);
@@ -34,14 +34,7 @@ test('SCADA signals, batch comparison and time cursor respond; animation contain
  await expect(page.locator('.scada-series')).toHaveCount(8);
  const video=page.locator('.demo-video');
  await video.scrollIntoViewIfNeeded();
- await expect.poll(()=>video.evaluate(v=>v.readyState)).toBeGreaterThanOrEqual(2);
- const result=await video.evaluate(async v=>{
-  const canvas=document.createElement('canvas');canvas.width=160;canvas.height=100;const ctx=canvas.getContext('2d');
-  async function frame(time){v.currentTime=time;await new Promise(resolve=>v.addEventListener('seeked',resolve,{once:true}));ctx.drawImage(v,0,0,160,100);return [...ctx.getImageData(0,0,160,100).data];}
-  const a=await frame(1),b=await frame(7);return {duration:v.duration,changed:a.filter((x,i)=>Math.abs(x-b[i])>15).length};
- });
- expect(result.duration).toBeGreaterThan(10);
- expect(result.changed).toBeGreaterThan(100);
+ await expect(video.getByRole('button',{name:'Odtwórz film',exact:true})).toBeVisible();
  await page.route('https://patrykchoinski.github.io/Promasz-Visu3D/',route=>route.fulfill({contentType:'text/html',body:'<h1>Simulator</h1>'}));
  await page.getByRole('button',{name:'Uruchom pełny symulator tutaj ↗'}).click();
  await expect(page.locator('.simulator-frame')).toHaveAttribute('src','https://patrykchoinski.github.io/Promasz-Visu3D/');

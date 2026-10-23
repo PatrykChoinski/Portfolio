@@ -54,7 +54,7 @@ export const machines = [
  {"id":"operator","preview":{"youtubeId":"zT3msdxHrQw","start":43,"source":"https://www.youtube.com/watch?v=zT3msdxHrQw"},"title":"Maszyna z perspektywy operatora","type":"PANEL OPERATORSKI / HMI","src":"./public/images/operator-panel.jpg","alt":"Dotykowy panel operatorski HMI przy przemysłowej maszynie do opakowań","description":"Parametry, receptury i czytelny interfejs — miejsce, w którym logika sterownika spotyka się z codzienną pracą operatora.","source":"https://www.zemat.com/boxmakers/boxmat-pro/"}
 ];
 export const interactiveDemos={
- visu:{title:'Ruch maszyny w 3D',description:'Nagranie animacji z rzeczywistej aplikacji Visu3D w trybie offline. Ruch narzędzia, geometria maszyny i symulacja programu obróbki.',video:'./public/video/machine-simulation.webm',url:'https://patrykchoinski.github.io/Promasz-Visu3D/'},
+ visu:{title:'Ruch maszyny w 3D',description:'15-sekundowy fragment nagrania wizualizacji 3D: ruch narzędzia i symulacja obróbki.',youtubeId:'PTCmEk8_ix4',start:40,duration:15,source:'https://youtu.be/PTCmEk8_ix4',url:'https://patrykchoinski.github.io/Promasz-Visu3D/'},
  scada:{title:'SCADA mieszalnika — trendy i raporty',description:'Interaktywny podgląd funkcji wykresów z projektu: porównanie przebiegów, wybór sygnałów i śledzenie etapów cyklu. Dane demonstracyjne, bez połączenia z instalacją.',signals:[
  {key:'mixer',name:'Temperatura mieszalnika',unit:'°C',max:120,color:'#ad8be3',axis:'temp'},
  {key:'flap',name:'Temperatura klapy',unit:'°C',max:120,color:'#ff6b9d',axis:'temp'},
