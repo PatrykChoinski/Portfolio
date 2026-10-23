@@ -1,6 +1,6 @@
 import {test,expect} from '@playwright/test';
 const stub=`window.YT={Player:class{constructor(mount,options){this.o=options;this.frame=document.createElement('iframe');mount.replaceWith(this.frame);setTimeout(()=>options.events.onReady({target:this}),0);}getIframe(){return this.frame;}mute(){}seekTo(){}playVideo(){this.o.events.onStateChange({data:1});}pauseVideo(){}destroy(){this.frame.remove();}}};window.onYouTubeIframeAPIReady();`;
-test('machine previews show photo for 2s, video for 10s, and stop outside viewport',async({page})=>{
+test('machine previews show photo for 1s, video for 15s, and stop outside viewport',async({page})=>{
  await page.emulateMedia({reducedMotion:'no-preference'});
  await page.route('https://www.youtube.com/iframe_api',route=>route.fulfill({contentType:'text/javascript',body:stub}));
  await page.goto('/');
@@ -8,9 +8,9 @@ test('machine previews show photo for 2s, video for 10s, and stop outside viewpo
  await expect(page.locator('[data-machine-video]')).toHaveCount(6);
  await card.scrollIntoViewIfNeeded();
  await expect(art).toHaveAttribute('data-preview','photo');
- await page.waitForTimeout(1500);await expect(art).toHaveAttribute('data-preview','photo');
+ await page.waitForTimeout(500);await expect(art).toHaveAttribute('data-preview','photo');
  await expect(art).toHaveAttribute('data-preview','video');
- await page.waitForTimeout(9000);await expect(art).toHaveAttribute('data-preview','video');
+ await page.waitForTimeout(14000);await expect(art).toHaveAttribute('data-preview','video');
  await expect(art).toHaveAttribute('data-preview','photo');
  await expect(art).toHaveAttribute('data-preview','video');
  await card.locator('.preview-toggle').click();await expect(art).toHaveAttribute('data-preview','photo');

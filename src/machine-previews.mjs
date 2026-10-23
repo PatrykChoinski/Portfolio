@@ -11,7 +11,7 @@ function loadYouTube(){
  });
 }
 
-// Each visible card repeats two seconds of the photograph, then ten seconds of playback.
+// Each visible card repeats one second of the photograph, then fifteen seconds of playback.
 export function initMachinePreviews(root){
  const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
  const disposers=[];
@@ -23,7 +23,7 @@ export function initMachinePreviews(root){
   function photo(){clear();state('photo');player?.pauseVideo();}
   function schedule(){
    photo();
-   if(visible&&!paused&&!document.hidden)timer=setTimeout(start,2000);
+   if(visible&&!paused&&!document.hidden)timer=setTimeout(start,1000);
   }
   function failed(){if(disposed)return;photo();paused=true;toggle.textContent='Ponów podgląd filmu';}
   async function start(){
@@ -43,7 +43,7 @@ export function initMachinePreviews(root){
        if(disposed)return;
        if(e.data===1){
         if(!visible||paused||document.hidden){photo();return;}
-        clear();state('video');timer=setTimeout(schedule,10000);
+        clear();state('video');timer=setTimeout(schedule,15000);
        }else if(e.data===0)schedule();
        else if(e.data===3){clearTimeout(timer);state('loading');watchdog=setTimeout(failed,15000);}
       },onError:failed

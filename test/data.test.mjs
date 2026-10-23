@@ -5,7 +5,7 @@ import { generateCvHtml } from '../scripts/cv-template.mjs';
 import { machines, portrait, technologyLogos, equipment, protocols, pipelineRuns } from '../src/data.mjs';
 import { stat } from 'node:fs/promises';
 import {sampleSignal} from '../src/scada-demo.mjs';
-test('filters compose category and case-insensitive technology search',()=>{assert.equal(filterProjects('Automatyka','  CODESYS  ').length,1);assert.equal(filterProjects('Automatyka','WebGL').length,0);assert.equal(filterProjects('Wszystkie','nieistniejąca').length,0);assert.equal(filterProjects().length,projects.length);});
+test('filters compose category and case-insensitive technology search',()=>{assert.equal(filterProjects('Automatyka','  Automatyczne testy  ').length,1);assert.equal(filterProjects('Automatyka','WebGL').length,0);assert.equal(filterProjects('Wszystkie','nieistniejąca').length,0);assert.equal(filterProjects().length,projects.length);});
 test('every case study has an anonymous company and supporting evidence',()=>{assert.equal(new Set(projects.map(p=>p.id)).size,projects.length);for(const p of projects){assert.match(p.sector,/^Firma z branży /);assert.ok(p.evidence&&p.challenge&&p.solution);assert.ok(p.tags.length);}});
 test('CV includes every current project and technology',()=>{const cv=generateCvHtml();for(const p of projects){assert.ok(cv.includes(p.title));assert.ok(cv.includes(p.sector));}for(const s of skills)for(const technology of s.items)assert.ok(cv.includes(technology));});
 test('public descriptions do not disclose customer names or local access data',()=>{const content=JSON.stringify({projects,skills})+generateCvHtml();assert.doesNotMatch(content,/SILSPEK|Promasz|ZEMAT|Induprogress|192\.168\.|password\s*[:=]|E:\\/i);});
