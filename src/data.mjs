@@ -110,3 +110,8 @@ export const site = {
  analyticsUrl:'https://analytics.google.com/analytics/web/#/a413259687p560519935/reports/intelligenthome',
  searchConsoleUrl:'https://search.google.com/search-console?resource_id=https%3A%2F%2Fpatrykchoinski.github.io%2FPortfolio%2F'
 };
+
+export const portfolioScreenshots = [
+ {id:'plc-library',title:'Struktura aplikacji PLC',src:'./public/screenshots/plc-library-redacted.png',alt:'Zanonimizowany zrzut edytora PLC z drzewem folderów i kodem Structured Text',caption:'Rzeczywisty widok biblioteki sterowania. Kod jest widoczny. W strukturze folderów pozostawiono czytelną nazwę Buffor; pozostałe nazwy zostały zamazane.'},
+ {id:'scada-screen',title:'Trendy i raporty procesu',src:'./public/screenshots/scada-trends.png',alt:'Zrzut aplikacji SCADA z trendami i wyborem sygnałów',caption:'Rzeczywisty ekran aplikacji SCADA: trendy procesu i wybór sygnałów.'}
+];

@@ -11,52 +11,54 @@ export function loadYouTube(){
  });
 }
 
-// Each visible card repeats one second of the photograph, then fifteen seconds of playback.
+// Buffer near the viewport; the photograph overlay has its own exact one-second timer.
 export function initMachinePreviews(root){
  const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
  const disposers=[];
  for(const card of root.querySelectorAll('[data-machine-video]')){
   const art=card.querySelector('.project-art'),toggle=card.querySelector('.preview-toggle');
-  let player,timer,watchdog,visible=false,paused=reduced,disposed=false,phase='photo';
-  const state=value=>{phase=value;art.dataset.preview=value;};
-  function clear(){clearTimeout(timer);clearTimeout(watchdog);}
-  function photo(){clear();state('photo');player?.pauseVideo();}
-  function schedule(){
-   photo();
-   if(visible&&!paused&&!document.hidden)timer=setTimeout(start,1000);
+  let player,photoTimer,videoTimer,retryTimer,watchdog,visible=false,near=false,paused=reduced,disposed=false,loading=false,playing=false,phase='photo',remaining=15000,started=0;
+  const active=()=>visible&&!paused&&!document.hidden&&!disposed;
+  function stopClock(){if(started){remaining=Math.max(0,remaining-(performance.now()-started));started=0;}clearTimeout(videoTimer);}
+  function clock(){if(active()&&phase==='video'&&playing&&!started){started=performance.now();videoTimer=setTimeout(cycle,remaining);}}
+  function cycle(){
+   stopClock();clearTimeout(photoTimer);remaining=15000;phase='photo';art.dataset.preview='photo';
+   if(!active()){player?.pauseVideo();return;}
+   if(player){player.seekTo(Number(card.dataset.videoStart),true);player.playVideo();}else prepare();
+   photoTimer=setTimeout(()=>{if(active()){phase='video';art.dataset.preview='video';clock();}},1000);
   }
-  function failed(){if(disposed)return;photo();paused=true;toggle.textContent='Ponów podgląd filmu';}
-  async function start(){
-   if(disposed||!visible||paused||document.hidden)return;
-   state('loading');watchdog=setTimeout(failed,15000);
+  function failed(){
+   if(disposed)return;stopClock();clearTimeout(watchdog);player?.destroy();player=undefined;playing=false;loading=false;
+   clearTimeout(retryTimer);retryTimer=setTimeout(()=>{if(near&&!paused&&!document.hidden)prepare();},5000);
+  }
+  async function prepare(){
+   if(player||loading||disposed||!near||paused||document.hidden)return;loading=true;
+   watchdog=setTimeout(failed,20000);
    try{
-    if(player){player.seekTo(Number(card.dataset.videoStart),true);player.playVideo();return;}
     const YT=await loadYouTube();
-    if(disposed||!visible||paused||document.hidden){photo();return;}
+    if(disposed||!near||paused||document.hidden){loading=false;clearTimeout(watchdog);return;}
     const mount=document.createElement('span');art.append(mount);
     player=new YT.Player(mount,{
      host:'https://www.youtube-nocookie.com',videoId:card.dataset.machineVideo,
      playerVars:{autoplay:1,mute:1,controls:0,playsinline:1,rel:0,disablekb:1,start:Number(card.dataset.videoStart),origin:location.origin},
      events:{
-      onReady:e=>{if(disposed)return;const frame=e.target.getIframe();frame.tabIndex=-1;frame.title='Film poglądowy: maszyna w działaniu';frame.setAttribute('aria-hidden','true');e.target.mute();if(visible&&!paused&&!document.hidden)e.target.playVideo();else photo();},
+      onReady:e=>{if(disposed)return;clearTimeout(watchdog);const frame=e.target.getIframe();frame.tabIndex=-1;frame.title='Film poglądowy: maszyna w działaniu';frame.setAttribute('aria-hidden','true');e.target.mute();e.target.playVideo();},
       onStateChange:e=>{
        if(disposed)return;
-       if(e.data===1){
-        if(!visible||paused||document.hidden){photo();return;}
-        clear();state('video');timer=setTimeout(schedule,15000);
-       }else if(e.data===0)schedule();
-       else if(e.data===3){clearTimeout(timer);state('loading');watchdog=setTimeout(failed,15000);}
+       if(e.data===1){clearTimeout(watchdog);playing=true;if(!active()){player.pauseVideo();return;}clock();}
+       else if(e.data===0){playing=false;if(active())cycle();}
+       else if(e.data===2||e.data===3){playing=false;stopClock();if(e.data===3)watchdog=setTimeout(failed,20000);}
       },onError:failed
      }
     });
    }catch{if(!disposed)failed();}
   }
-  toggle.textContent=paused?'Uruchom podgląd filmu':'Wstrzymaj podgląd';
-  toggle.addEventListener('click',()=>{paused=!paused;toggle.textContent=paused?'Uruchom podgląd filmu':'Wstrzymaj podgląd';schedule();});
-  const observer=new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;schedule();},{threshold:.35});
-  observer.observe(art);
-  const visibility=()=>schedule();document.addEventListener('visibilitychange',visibility);
-  disposers.push(()=>{disposed=true;clear();observer.disconnect();document.removeEventListener('visibilitychange',visibility);player?.destroy();});
+  toggle.textContent=paused?'Uruchom animację':'Wstrzymaj animację';
+  toggle.addEventListener('click',()=>{paused=!paused;toggle.textContent=paused?'Uruchom animację':'Wstrzymaj animację';cycle();if(!paused)prepare();});
+  const preloader=new IntersectionObserver(entries=>{near=entries[0].isIntersecting;if(near)prepare();},{rootMargin:'600px',threshold:0});preloader.observe(art);
+  const observer=new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;cycle();},{threshold:.35});observer.observe(art);
+  const visibility=()=>{cycle();if(!document.hidden)prepare();};document.addEventListener('visibilitychange',visibility);
+  disposers.push(()=>{disposed=true;stopClock();clearTimeout(photoTimer);clearTimeout(retryTimer);clearTimeout(watchdog);observer.disconnect();preloader.disconnect();document.removeEventListener('visibilitychange',visibility);player?.destroy();});
  }
  return ()=>disposers.forEach(dispose=>dispose());
 }
