@@ -37,8 +37,8 @@ Aktualność stanowiska Field Application Engineer i publikację e-maila oraz te
 
 Workflow `.github/workflows/ci.yml`: testy po `push` do `main`, `pull_request` do `main` oraz ręcznie. Generuje CV, buduje stronę i sprawdza ją w Chromium. Deployment GitHub Pages następuje wyłącznie po sukcesie dla `main`; pull requesty nie publikują.
 
-Po autoryzowanym pierwszym pushu ustaw **Settings → Pages → Source: GitHub Actions** i `main` jako domyślną gałąź. Puste repo zdalne wskazywało `master`; lokalna gałąź `main` odpowiada wymaganiu użytkownika. Docelowy adres: `https://patrykchoinski.github.io/Portfolio/`.
+Repozytorium używa `main` jako domyślnej gałęzi, a GitHub Pages jest skonfigurowane z **Source: GitHub Actions**. Adres strony: `https://patrykchoinski.github.io/Portfolio/`.
 
 Lokalny `git pull` nie jest zdarzeniem GitHub Actions. CI uruchamia pull request, push lub ręczne wywołanie w zakładce Actions.
 
-**Nie wykonano pushu ani publikacji.** Commity pozostają lokalne.
+Pierwszy push i uruchomienie publikacji wykonano na polecenie właściciela 23.10.2026. Kolejne pushe wymagają bezpośredniego polecenia użytkownika zgodnie z zasadami repozytorium.
