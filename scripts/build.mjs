@@ -1,0 +1,10 @@
+import { mkdir, cp, readFile, writeFile } from 'node:fs/promises';
+import { generateCvHtml } from './cv-template.mjs';
+await mkdir('dist', {recursive:true});
+await cp('index.html','dist/index.html');
+await cp('src','dist/src',{recursive:true});
+await cp('public','dist/public',{recursive:true});
+await mkdir('dist/public/cv',{recursive:true});
+await writeFile('dist/public/cv/index.html',generateCvHtml());
+await writeFile('dist/.nojekyll','');
+console.log('Portfolio built in dist/');
