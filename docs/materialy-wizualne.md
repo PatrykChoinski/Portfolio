@@ -36,3 +36,13 @@ Panel Actions odtwarza wybrane etapy publicznych przebiegów CODESYS CI: #21 z 2
 Usunięto karty energii i wizualizacji przeglądarkowej; animacja 3D pozostaje w sekcji aplikacji w działaniu.
 
 Dodano zdjęcie regulatora temperatury DTM (DTME04) ze strony InduProgress: https://induprogress.pl/produkt/dtme04/. Lokalny plik: public/equipment/temperature-controller.jpg. Podpis pozostaje ogólny, bez nazwy modelu. Kompetencję regulacji PID i histerezy dodano na podstawie deklaracji właściciela portfolio z 23.10.2026.
+
+Filmy poglądowe kart projektów (publiczne odtwarzacze YouTube, bez kopiowania plików):
+- Serwis form: https://www.youtube.com/watch?v=hWU-LDsQ984 — film osadzony przez DME na https://www.dme.net/coolingcare/.
+- Żaluzje: https://www.youtube.com/watch?v=fPZLL5Wu0Hg — osadzony na stronie źródłowej fotografii Magnum.
+- Formowanie opakowań: https://www.youtube.com/watch?v=n0G_CizMkUM — osadzony na https://era-tech.pl/1739-2/.
+- Kamień: https://www.youtube.com/watch?v=ZxMkAq89g_w — oficjalny kanał wskazany na stronie źródłowej; tytuł „Jednosuportowa piła PLC ( 5osi )”, potwierdzony w kanale RSS.
+- Opakowania: https://www.youtube.com/watch?v=Lh55n9MseT8 — osadzony na stronie źródłowej fotografii.
+- Panel operatora: https://www.youtube.com/watch?v=zT3msdxHrQw — film tej samej maszyny opakowaniowej; jest kontekstem obsługi maszyny, nie nagraniem instalacji SCADA właściciela.
+
+Filmy są materiałem poglądowym, nie dowodem autorstwa aplikacji ani udziału w realizacji konkretnego egzemplarza. Zachowano oryginalne odtwarzacze i oznaczenia źródeł. Cykl widocznej karty: 2 s fotografii, następnie 10 s odtwarzania (od zdarzenia PLAYING), powtarzany. Ukryte karty i karta przeglądarki w tle wstrzymują filmy; preferencja ograniczenia ruchu wymaga ręcznego uruchomienia. Błąd odtwarzacza pozostawia zdjęcie i możliwość ponowienia.
