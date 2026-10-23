@@ -1,5 +1,5 @@
 import {test,expect} from '@playwright/test';
-import {fileURLToPath} from 'node:url';
+import {readFile} from 'node:fs/promises';
 const production='https://patrykchoinski.github.io/Portfolio/';
 test('clean layout, full portrait and sticky navigation on desktop and mobile',async({page})=>{
  for(const width of [1280,390]){
@@ -22,10 +22,11 @@ test('production HTML contains project content and SEO even without JavaScript',
 });
 test('GA4 loads only after consent, sends one pageview and useful events without search/contact data',async({page})=>{
  let tagLoads=0;
+ const config=(await readFile(new URL('../../src/data.mjs',import.meta.url),'utf8')).replace("url:'https://patrykchoinski.github.io/Portfolio/'","url:'http://127.0.0.1:4173/'");
  await page.route('https://www.googletagmanager.com/**',route=>{tagLoads++;return route.fulfill({contentType:'text/javascript',body:'/* mocked Google tag: no production data transmitted */'});});
- await page.route(production+'**',route=>{const path=new URL(route.request().url()).pathname.slice('/Portfolio/'.length);return route.fulfill({path:fileURLToPath(new URL('../../dist/'+(path||'index.html'),import.meta.url))});});
+ await page.route('**/src/data.mjs',route=>route.fulfill({contentType:'text/javascript',body:config}));
  await page.addInitScript(()=>document.addEventListener('click',event=>{const a=event.target.closest('a');if(a&&(/^(mailto:|tel:)/.test(a.getAttribute('href'))||a.getAttribute('download')!==null))event.preventDefault();}));
- await page.goto(production+'?email=private@example.com&utm_source=linkedin');
+ await page.goto('/?email=private@example.com&utm_source=linkedin');
  await expect(page.getByRole('button',{name:'Zgadzam się na statystyki'})).toBeVisible();expect(tagLoads).toBe(0);
  await page.getByRole('button',{name:'Bez statystyk',exact:true}).click();expect(tagLoads).toBe(0);
  await page.getByRole('button',{name:'Ustawienia statystyk',exact:true}).click();await page.getByRole('button',{name:'Zgadzam się na statystyki'}).click();
@@ -38,7 +39,9 @@ test('GA4 loads only after consent, sends one pageview and useful events without
  expect(JSON.stringify(commands)).not.toContain('private@example.com');expect(JSON.stringify(events)).not.toContain('patryk@');
  expect(events.filter(e=>e[1]==='contact_click').map(e=>e[2])).toEqual([{contact_method:'email'},{contact_method:'phone'}]);
  await page.reload();await expect.poll(()=>tagLoads).toBe(2);await expect(page.locator('.consent-panel')).toBeHidden();
- await page.getByRole('button',{name:'Ustawienia statystyk',exact:true}).click();await page.getByRole('button',{name:'Bez statystyk',exact:true}).click();await expect(page.locator('.consent-panel')).toBeHidden();
+ await page.getByRole('button',{name:'Ustawienia statystyk',exact:true}).click();
+ await Promise.all([page.waitForEvent('domcontentloaded'),page.getByRole('button',{name:'Bez statystyk',exact:true}).click()]);
+ await expect(page.locator('.consent-panel')).toBeHidden();
  expect(await page.evaluate(()=>localStorage.getItem('portfolio-analytics-consent-v1'))).toBe('denied');
  await page.reload();expect(tagLoads).toBe(2);
  await page.unrouteAll({behavior:'wait'});
