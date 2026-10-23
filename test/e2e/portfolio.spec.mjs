@@ -11,6 +11,8 @@ test('automation comes first and all photos and application logos load',async({p
  await expect(page.locator('#projects .project-card').first()).toContainText('Czyszczenie i diagnostyka kanałów form');
  await expect(page.locator('#projects .project-art.has-photo')).toHaveCount(6);
  await expect(page.locator('.technology-logo')).toHaveCount(8);
+ await expect(page.locator('#kompetencje .work-screenshots img')).toHaveCount(2);
+ await expect(page.locator('#dema .work-screenshots')).toHaveCount(0);
  await expect(page.locator('.hero-portrait')).toHaveAttribute('alt','Patryk Choiński');
  for(const image of await page.locator('img').all()){
   await image.scrollIntoViewIfNeeded();
