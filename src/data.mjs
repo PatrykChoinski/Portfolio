@@ -101,3 +101,13 @@ export const protocols = [
 
 export const pipelineRuns = [{"number":21,"date":"2026-09-22T10:19:42Z","url":"https://github.com/PatrykChoinski/Codesys-CI-CD/actions/runs/35715363533","result":"success","steps":[{"name":"Checkout","result":"success","seconds":6},{"name":"Compile project","result":"success","seconds":31},{"name":"Deploy application to runtime (login, download, start)","result":"success","seconds":90},{"name":"Run smoke test","result":"success","seconds":37},{"name":"Write consolidated report","result":"success","seconds":0}]},{"number":24,"date":"2026-09-24T09:04:27Z","url":"https://github.com/PatrykChoinski/Codesys-CI-CD/actions/runs/35979015070","result":"failure","steps":[{"name":"Checkout","result":"success","seconds":6},{"name":"Compile project","result":"failure","seconds":146},{"name":"Deploy application to runtime (login, download, start)","result":"skipped","seconds":0},{"name":"Run smoke test","result":"skipped","seconds":0},{"name":"Write consolidated report","result":"success","seconds":0}]}]
 ;
+
+export const site = {
+ url:'https://patrykchoinski.github.io/Portfolio/',
+ title:'Patryk Choiński | Automatyka przemysłowa | PLC · HMI · Motion',
+ description:'Patryk Choiński — portfolio automatyki przemysłowej: PLC, HMI, SCADA, sterowanie ruchem, serwonapędy i aplikacje maszynowe.',
+ measurementId:'G-9LDN9QT3BG',
+ searchConsoleVerification:'pHfgscL4jHIHr1DB6bfPVhhSE_kVvRV8cjs6SMkTb0E',
+ analyticsUrl:'https://analytics.google.com/analytics/web/#/a413259687p560519935/reports/intelligenthome',
+ searchConsoleUrl:'https://search.google.com/search-console?resource_id=https%3A%2F%2Fpatrykchoinski.github.io%2FPortfolio%2F'
+};

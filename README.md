@@ -46,3 +46,7 @@ Repozytorium używa `main` jako domyślnej gałęzi, a GitHub Pages jest skonfig
 Lokalny `git pull` nie jest zdarzeniem GitHub Actions. CI uruchamia pull request, push lub ręczne wywołanie w zakładce Actions.
 
 Pierwszy push i uruchomienie publikacji wykonano na polecenie właściciela 23.10.2026. Kolejne pushe wymagają bezpośredniego polecenia użytkownika zgodnie z zasadami repozytorium.
+
+## Statystyki i SEO
+
+Integracja GA4 z wyborem odwiedzającego, zdarzenia CV/kontaktu/projektów, Web Vitals, metadane wyszukiwarki, mapa witryny i HTML czytelny bez JavaScript. Panel właściciela: /statystyki.html. Instrukcja podłączenia i zakres danych: docs/statystyki-seo.md. Lokalny podgląd nie jest zliczany. Przed pierwszym uruchomieniem zbuduj projekt.
