@@ -14,7 +14,7 @@
     "cv": "node scripts/generate-cv.mjs"
   },
   "devDependencies": {
-    "@playwright/test": "^1.56.1"
+    "@playwright/test": "1.64.1"
   },
   "dependencies": {
     "web-vitals": "^6.2.3"

@@ -43,4 +43,6 @@ Na koncie właściciela w usłudze Portfolio (560519935) zapisano osiem wymiaró
 
 W pomiarze zaawansowanym wyłączono wyświetlenia po zmianie historii oraz automatyczne przewijanie, kliknięcia, wyszukiwania, formularze, filmy i pobrania. Odpowiadające interakcje mierzy kod portfolio, bez przesyłania niepotrzebnych treści i bez zdublowanych zdarzeń. Wbudowane zdarzenia sesji i zaangażowania GA4 nadal zapewnia sam tag. Zmiany potwierdzono w interfejsie Google, bez tworzenia sztucznego ruchu w testach.
 
-Do zakończenia po publikacji pozostaje potwierdzenie odbioru rzeczywistego ruchu i weryfikacja Search Console metatagiem, a potem zgłoszenie mapy witryny. Skonfigurowane raporty nie oznaczają jeszcze, że nowy kod jest wdrożony.
+Po publikacji należy potwierdzić odbiór ruchu, zweryfikować Search Console metatagiem i zgłosić mapę witryny. Stan kodu źródłowego sam w sobie nie jest potwierdzeniem działania produkcyjnego pomiaru.
+
+CI: test prywatności sprawdza dokładny kształt zdarzeń kontaktowych zamiast wyszukiwania trzech cyfr mogących wystąpić w identyfikatorze pomiaru. Testy uruchamia oficjalny obraz mcr.microsoft.com/playwright:v1.64.1-noble z gotowymi zależnościami. Wersja @playwright/test jest przypięta do 1.64.1 i musi odpowiadać obrazowi przy aktualizacji. Wszystkie dotychczasowe etapy testów, generowania CV i budowania strony pozostają wymagane.
