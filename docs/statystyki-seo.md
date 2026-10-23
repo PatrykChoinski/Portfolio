@@ -36,3 +36,11 @@ Build generuje metadane canonical, Open Graph, kartę Twitter i JSON-LD ProfileP
 ## Weryfikacja
 
 `npm test`, `npm run cv`, `npm run build`, `npm run test:e2e`. Testy sprawdzają zgodę i wycofanie zgody, jeden pageview, brak danych kontaktowych i treści wyszukiwania w zdarzeniach, zdarzenia CV/kontaktu/projektów, wyłączenie localhost, treść bez JS, metadane, mapę, kolejność sekcji, portret bez kadrowania i przyklejone menu na telefonie oraz komputerze. Google tag jest w testach zastępowany, aby nie wysyłać sztucznego ruchu na prawdziwe konto.
+
+## Ustawienia konta wykonane 23.10.2026
+
+Na koncie właściciela w usłudze Portfolio (560519935) zapisano osiem wymiarów zdarzeń: section_id, project_id, contact_method, demo_name, category, percent_scrolled, metric_name, metric_rating. Zapisano wskaźnik metric_value jako Standard, z opisem jednostek. Zdarzenia cv_download i contact_click utworzono z kodem i oznaczono jako kluczowe, bez wartości pieniężnej, z liczeniem raz na zdarzenie. Potwierdzono ich obecność w tabeli kluczowych zdarzeń.
+
+W pomiarze zaawansowanym wyłączono wyświetlenia po zmianie historii oraz automatyczne przewijanie, kliknięcia, wyszukiwania, formularze, filmy i pobrania. Odpowiadające interakcje mierzy kod portfolio, bez przesyłania niepotrzebnych treści i bez zdublowanych zdarzeń. Wbudowane zdarzenia sesji i zaangażowania GA4 nadal zapewnia sam tag. Zmiany potwierdzono w interfejsie Google, bez tworzenia sztucznego ruchu w testach.
+
+Do zakończenia po publikacji pozostaje potwierdzenie odbioru rzeczywistego ruchu i weryfikacja Search Console metatagiem, a potem zgłoszenie mapy witryny. Skonfigurowane raporty nie oznaczają jeszcze, że nowy kod jest wdrożony.
