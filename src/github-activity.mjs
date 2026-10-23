@@ -3,6 +3,7 @@ const escape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&g
 export async function initGithubActivity(){
  let root=document.querySelector('#github');
  if(!root){root=document.createElement('section');root.id='github';root.className='section github-section';document.querySelector('main').append(root);}
+ document.querySelector('.experience-section').before(root);
  try{
   const response=await fetch(new URL('../public/github-activity.json',import.meta.url));if(!response.ok)throw new Error();const data=await response.json();
   const format=new Intl.NumberFormat('pl-PL'),date=value=>new Intl.DateTimeFormat('pl-PL',{day:'numeric',month:'short',year:'numeric',timeZone:'Europe/Warsaw'}).format(new Date(value));

@@ -1,4 +1,5 @@
 import {refreshGithubActivity} from './github-activity.mjs';
+import {createHash} from 'node:crypto';
 import { mkdir, cp, readFile, writeFile } from 'node:fs/promises';
 import { generateCvHtml } from './cv-template.mjs';
 import {seoHead,privacyPage,reportsPage,sitemap} from './site-template.mjs';
@@ -15,6 +16,11 @@ await mkdir('dist/public/vendor',{recursive:true});
 await cp('node_modules/web-vitals/dist/web-vitals.js','dist/public/vendor/web-vitals.js');
 await cp('node_modules/web-vitals/LICENSE','dist/public/vendor/web-vitals-LICENSE.txt');
 let html=await readFile('dist/index.html','utf8');
+// A changed stylesheet receives a new URL, including in browsers with a warm cache.
+for(const match of [...html.matchAll(/href="(\.\/src\/[^"?]+\.css)"/g)]){
+ const revision=createHash('sha256').update(await readFile(match[1])).digest('hex').slice(0,12);
+ html=html.replaceAll(`href="${match[1]}"`,`href="${match[1]}?v=${revision}"`);
+}
 await writeFile('dist/index.html',html.replace('</head>',seoHead()+'</head>'));
 await writeFile('dist/prywatnosc.html',privacyPage());
 await writeFile('dist/statystyki.html',reportsPage());
