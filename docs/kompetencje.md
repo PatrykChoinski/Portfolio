@@ -8,7 +8,7 @@ Ocena na podstawie starego CV, lokalnych projektów oraz dostępnych repozytori�
 2. **Motion Control:** pozycjonowanie, bazowanie osi, ruchy ręczne i automatyczne, interpolacja oraz profile ruchu w aplikacjach obróbczych.
 3. **Napędy:** serwonapędy Delta, falowniki, enkodery oraz narzędzia ASDASOFT i VFDSoft. Podstawa: dokumentacja aplikacji maszyny do obróbki kamienia.
 4. **HMI:** DIAScreen, panele Delta, obsługa trybów pracy i parametrów maszyny; osobna aplikacja operatorska powiązana z PLC.
-5. **SCADA:** DIAView, KingSCADA, KingView, dane historyczne, receptury, trendy i raporty, SQL Server.
+5. **SCADA:** DIAView, KingSCADA, KingView, dane historyczne, receptury, trendy i raporty, SQL Server i PostgreSQL. Duży zakres pracy z obiema bazami potwierdzony przez właściciela portfolio 23.10.2026.
 6. **Robotyka i układy wykonawcze:** roboty Delta i Fanuc, pneumatyka, układy elektryczne, EPLAN i SEE Electrical. Podstawa: CV.
 7. **Integracje przemysłowe:** OPC UA, Node-RED, pomiary energii, dashboardy i alarmy.
 

@@ -1,4 +1,5 @@
-import { profile, projects, skills, experience, applicationAreas, filterProjects, portrait, machines, technologyLogos } from './data.mjs';
+import { profile, projects, skills, experience, applicationAreas, filterProjects, portrait, machines, technologyLogos, interactiveDemos } from './data.mjs';
+import {initScada} from './scada-demo.mjs';
 const escape = s => String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let category = 'Wszystkie';
 const categories = ['Wszystkie', ...new Set(projects.map(p=>p.category))];
@@ -21,12 +22,10 @@ dialog.querySelector('.close').addEventListener('click',()=>dialog.close());
 dialog.addEventListener('click',e=>{if(e.target===dialog){const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)dialog.close();}});
 document.querySelector('#year').textContent=new Date().getFullYear();
 const heroMachine=document.querySelector('.hero .machine');
-document.querySelector('.hero .eyebrow').insertAdjacentHTML('afterbegin',`<img class="hero-avatar" src="${portrait.src}" alt="${portrait.alt}" width="42" height="42">`);
-heroMachine.classList.add('photo-hero');
+heroMachine.classList.add('portrait-hero');
 heroMachine.removeAttribute('role');
 heroMachine.removeAttribute('aria-label');
-heroMachine.innerHTML=`<div class="machine-top"><span>AUTOMATYKA W PRAKTYCE</span><span class="live">PLC × MOTION</span></div><img class="hero-machine-photo" src="${machines[0].src}" alt="${escape(machines[0].alt)}" width="1156" height="521" fetchpriority="high"><div class="machine-bottom"><span>Piła mostowa · zdjęcie poglądowe</span><a href="#maszyny">Poznaj maszyny ↗</a></div>`;
-document.querySelector('#o-mnie>div').insertAdjacentHTML('beforeend',`<figure class="about-portrait"><img src="${portrait.src}" alt="${portrait.alt}" width="460" height="460" loading="lazy"><figcaption><strong>${profile.name}</strong><small>Field Application Engineer</small></figcaption></figure>`);
+heroMachine.innerHTML=`<div class="machine-top"><span>FIELD APPLICATION ENGINEER</span><span class="live">PLC × HMI × MOTION</span></div><img class="hero-portrait" src="${portrait.src}" alt="${escape(portrait.alt)}" width="460" height="460" fetchpriority="high"><div class="machine-bottom"><strong>${profile.name}</strong><span>Automatyka przemysłowa</span></div>`;
 const logoCard=logo=>`<a class="technology-logo" href="${logo.source}" target="_blank" rel="noopener noreferrer" aria-label="${logo.name} — źródło logotypu"><img src="${logo.src}" alt="" width="36" height="36" loading="lazy"><span>${logo.name}</span></a>`;
 document.querySelector('#kompetencje .section-head').insertAdjacentHTML('afterend',`<div class="technology-logos automation-logos" aria-label="Oprogramowanie automatyki">${technologyLogos.filter(l=>l.area==='automation').map(logoCard).join('')}</div>`);
 document.querySelector('.support-area').insertAdjacentHTML('beforeend',`<div class="technology-logos support-logos" aria-label="Narzędzia uzupełniające">${technologyLogos.filter(l=>l.area!=='automation').map(logoCard).join('')}</div>`);
@@ -35,3 +34,8 @@ document.querySelector('#projekty').insertAdjacentHTML('afterend',`<section id="
 document.querySelector('#cv .actions').insertAdjacentHTML('afterend',`<p class="contact-details"><a href="mailto:${profile.email}">${profile.email}</a> &nbsp; / &nbsp; <a href="tel:+48696568545">${profile.phone}</a></p>`);
 document.querySelector('#cv').insertAdjacentHTML('beforebegin',`<section class="section experience-section"><div class="section-head"><div><p class="eyebrow">DOŚWIADCZENIE</p><h2>Praktyka inżynierska.</h2></div></div><div class="experience-grid">${experience.map(e=>`<article class="experience-item"><small>${escape(e.period)}</small><h3>${escape(e.role)}</h3><p class="card-sector">${escape(e.company)}</p><p>${escape(e.description)}</p></article>`).join('')}</div></section>`);
 render();
+document.querySelector('#projekty').insertAdjacentHTML('beforebegin',`<section id="dema" class="section demo-section"><div class="section-head"><div><p class="eyebrow">APLIKACJE W DZIAŁANIU</p><h2>${interactiveDemos.visu.title}</h2></div><p>${interactiveDemos.visu.description}</p></div><video class="demo-video" src="${interactiveDemos.visu.video}" controls muted loop playsinline preload="metadata" aria-label="Animacja z aplikacji Visu3D — symulacja pracy maszyny"></video><div class="demo-links"><button type="button" id="load-simulator">Uruchom pełny symulator tutaj ↗</button><a class="text-link" href="${interactiveDemos.visu.url}" target="_blank" rel="noopener noreferrer">Otwórz aplikację w nowej karcie ↗</a></div><div id="simulator-slot"></div><div class="section-head"><div><p class="eyebrow">SCADA / DANE PROCESOWE</p><h2>${interactiveDemos.scada.title}</h2></div></div><p class="scada-intro">${interactiveDemos.scada.description}</p><div id="scada-demo"></div></section>`);
+const video=document.querySelector('.demo-video');
+if(!matchMedia('(prefers-reduced-motion: reduce)').matches){video.autoplay=true;video.play().catch(()=>{});}
+document.querySelector('#load-simulator').addEventListener('click',e=>{document.querySelector('#simulator-slot').innerHTML=`<iframe class="simulator-frame" src="${interactiveDemos.visu.url}" title="Interaktywny symulator Visu3D" loading="lazy" allow="fullscreen" referrerpolicy="no-referrer"></iframe>`;e.currentTarget.disabled=true;e.currentTarget.textContent='Symulator uruchomiony poniżej';});
+initScada(document.querySelector('#scada-demo'));

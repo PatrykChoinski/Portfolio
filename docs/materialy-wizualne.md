@@ -11,3 +11,14 @@ Zdjęcia maszyn służą jako materiały poglądowe do pokazania fizycznego kont
 - Pozostałe SVG: zasoby projektu Devicon, dostępne wraz z licencją MIT w https://github.com/devicons/devicon/blob/master/LICENSE. Znaki towarowe należą do właścicieli poszczególnych technologii.
 
 Materiały producentów i logotypy zachowują prawa ich właścicieli; pobranie nie stanowi przeniesienia licencji. Użycie znaków identyfikuje narzędzia, nie partnerstwo ani rekomendację. Wszystkie pliki są przechowywane lokalnie, więc strona nie wymaga zewnętrznych żądań po obrazy.
+
+## Dodatkowe realizacje i demonstracje
+
+- `public/images/mould-care.png`: fotografia urządzenia do obsługi kanałów chłodzenia form, katalog dystrybutora https://www.dme.net/coolingcare/.
+- `public/images/blinds-4000.jpg`: fotografia automatu do żaluzji serii 4000 z katalogu producenta; dokładny odnośnik w danych portfolio.
+- `public/images/blow-moulding-4000.jpg`: fotografia butelczarki serii 4000 z katalogu producenta; dokładny odnośnik w danych portfolio.
+- `public/video/machine-simulation.webm`: 12-sekundowe nagranie samej sceny WebGL publicznej aplikacji Visu3D. Tryb offline, konto demonstracyjne, program przykładowy. Nie pokazuje rzeczywistego sterownika ani danych zakładu. Obok nagrania można osadzić pełny publiczny symulator — ten element wymaga połączenia z internetem.
+- `src/scada-demo.mjs`: nowy demonstrator funkcji wykresów, opracowany na podstawie kategorii sygnałów i funkcji porównywania cykli w lokalnym projekcie SCADA. Kod oryginalnej aplikacji i bazy produkcyjne nie zostały skopiowane. Wszystkie przebiegi są jawnie opisane jako syntetyczne.
+- SQL Server i PostgreSQL: kompetencje potwierdzone bezpośrednio przez właściciela 23.10.2026; oryginalne logotypy z Devicon.
+
+Opisy udziału dotyczą aplikacji sterowania i wskazanych projektów. Nie utożsamiają udziału właściciela portfolio z autorstwem całej maszyny lub całej aplikacji zespołowej.
