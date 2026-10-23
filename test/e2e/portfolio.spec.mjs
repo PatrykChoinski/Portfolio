@@ -38,6 +38,8 @@ test('SCADA signals, batch comparison and time cursor respond; 3D demo offers vi
  await video.scrollIntoViewIfNeeded();
  await expect(video.getByRole('button',{name:'Odtwórz film',exact:true})).toBeVisible();
  await page.route('https://patrykchoinski.github.io/Promasz-Visu3D/',route=>route.fulfill({contentType:'text/html',body:'<h1>Simulator</h1>'}));
+ await expect(page.locator('.demo-links a')).toHaveCSS('background-color','rgb(194, 249, 112)');
+ await expect(page.getByRole('button',{name:'Uruchom pełny symulator tutaj ↗'})).toHaveCSS('background-color','rgb(194, 249, 112)');
  await page.getByRole('button',{name:'Uruchom pełny symulator tutaj ↗'}).click();
  await expect(page.locator('.simulator-frame')).toHaveAttribute('src','https://patrykchoinski.github.io/Promasz-Visu3D/');
 });
