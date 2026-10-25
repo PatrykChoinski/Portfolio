@@ -37,4 +37,4 @@ export async function collect(source,fetcher=fetch){
  const data=await res.json();
  return data.jobs.map(j=>normalize({title:j.title,url:j.absolute_url,description:j.content,location:j.location?.name,company:source.board,greenhouse:{board:source.board,id:j.id}},`Greenhouse: ${source.board}`));
 }
-export function applicationText(job){return `Dzień dobry,\n\naplikuję na stanowisko ${job.title}. ${profile.summary}\n\nPortfolio: https://patrykchoinski.github.io/Portfolio/\nOczekiwania: od 15 000 PLN brutto miesięcznie, umowa o pracę.\n\n${profile.name}\n${profile.email}\n${profile.phone}`;}
+export function applicationText(job,config=defaults){return `Dzień dobry,\n\naplikuję na stanowisko ${job.title}. ${profile.summary}\n\nPortfolio: https://patrykchoinski.github.io/Portfolio/\nOczekiwania: od ${config.minimumSalary.toLocaleString('pl-PL')} PLN brutto miesięcznie, umowa o pracę.\n\n${profile.name}\n${profile.email}\n${profile.phone}`;}

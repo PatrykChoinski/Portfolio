@@ -21,7 +21,7 @@ W szczegółach oferty można uzupełnić potwierdzone widełki brutto UoP i wsp
 | Portal | Odczyt ofert przez lokalny serwer | Aplikowanie i konto |
 | --- | --- | --- |
 | Pracuj.pl | Wyszukiwanie „automatyk, Warszawa”; w sprawdzeniu na żywo HTTP 403 | Wymaga przeglądarki i konta; brak automatycznego adaptera wysyłki |
-| RocketJobs | Kategoria automatyka, widoczne strony „Następna”, do 10 stron i 500 szczegółów | Wymaga formularza portalu; brak automatycznego adaptera wysyłki |
+| RocketJobs | Kategoria automatyka, widoczne strony „Następna”, do 10 stron i 500 szczegółów | Lokalna wysyłka rozpoznanym formularzem bez konta; dodatkowe wymagania zatrzymują wysyłkę |
 | No Fluff Jobs | Kategoria automatyka, pierwsza strona, do 30 szczegółów | Wymaga formularza portalu; brak automatycznego adaptera wysyłki |
 | Aplikuj.pl | Wyszukiwanie automatyk w Warszawie, widoczne strony „Następna”, do 10 stron i 500 szczegółów; zawiera też reklamy innych zawodów | Wymaga formularza portalu; brak automatycznego adaptera wysyłki |
 | LinkedIn | Obsługa przez zalogowaną przeglądarkę, bez adaptera serwerowego | Wymaga aktywnej sesji; istniejącego profilu nie należy dublować |
@@ -45,7 +45,7 @@ Import JSON: tablica ofert lub obiekt `{ "jobs": [...] }`. Poniżej wyłącznie 
 
 Przycisk „Przygotuj / aplikuj” generuje treść opartą na CV. Bez dostępnej integracji zapisuje **przygotowanie**, nie wysłanie. Otwórz ofertę, wypełnij formularz i potwierdź ręczne wysłanie w panelu. Rozmowy i odrzucenia rejestruje użytkownik; panel nie odczytuje odpowiedzi rekruterów.
 
-Automatyczna wysyłka jest zaimplementowana wyłącznie dla Greenhouse z uprawnionym kluczem API pracodawcy w zmiennej środowiskowej `GREENHOUSE_KEY_IDENTYFIKATOR_TABLICY` (myślniki zastąp podkreśleniami, wielkie litery). Typowe konto kandydata nie posiada tego klucza. Kluczy nie umieszczaj w repozytorium. Dokumentacja: https://docs.greenhouse.io/job-board. Wysyłany jest tekst CV z profilu, doświadczenia i kompetencji oraz treść aplikacji; nie jest wysyłany eksperymentalny rankingowy prompt z publicznego CV. Nie jest dołączany PDF. Formularze wymagające PDF, dodatkowych odpowiedzi lub zgód wymagają ręcznego uzupełnienia.
+Automatyczna wysyłka przez API jest zaimplementowana dla Greenhouse z uprawnionym kluczem API pracodawcy w zmiennej środowiskowej `GREENHOUSE_KEY_IDENTYFIKATOR_TABLICY` (myślniki zastąp podkreśleniami, wielkie litery). Typowe konto kandydata nie posiada tego klucza. Kluczy nie umieszczaj w repozytorium. Dokumentacja: https://docs.greenhouse.io/job-board. Wysyłany jest tekst CV z profilu, doświadczenia i kompetencji oraz treść aplikacji; nie jest wysyłany eksperymentalny rankingowy prompt z publicznego CV. Nie jest dołączany PDF. Formularze wymagające PDF, dodatkowych odpowiedzi lub zgód wymagają ręcznego uzupełnienia.
 
 Automatyzacja domyślnie wyłączona. Po włączeniu obejmuje nowe kwalifikujące się oferty podczas skanowania. Po utracie potwierdzenia lub przerwaniu procesu status „Sprawdź potwierdzenie” blokuje automatyczne ponowienie. Potwierdzone wysłanie wymaga odpowiedzi API `success: true`. Nie wykonano rzeczywistych wysyłek w testach.
 
@@ -56,3 +56,13 @@ Wysyłka wykonana przez asystenta w przeglądarce jest zapisywana osobno jako �
 Automatyczny odczyt widełek UoP uznaje tylko jednoznaczny zapis zakresu z etykietą „PLN Brutto miesięcznie – UoP”. Odróżnia go od osobnych kwot netto B2B i nie bierze widełek z sekcji podobnych ofert. Sprzeczne zakresy pozostają do weryfikacji. Samo salary w JobPosting nadal nie potwierdza brutto ani UoP.
 
 Dla RocketJobs odczytywane są też współrzędne z publicznych danych strony, wyłącznie gdy identyfikator oferty oraz miasto są zgodne z aktualnym ogłoszeniem i istnieje jedna jednoznaczna para współrzędnych. Współrzędne podobnych ofert są pomijane. Kod dekoduje JSON bez uruchamiania skryptów strony. Brak jednoznacznego wyniku nadal wymaga weryfikacji lokalizacji.
+
+## Lokalna wysyłka RocketJobs
+
+Obsługa formularza bez konta jest zaimplementowana w rocket-apply.mjs i podłączona do przycisku „Przygotuj / aplikuj” oraz opcji automatycznego aplikowania. Własna przeglądarka działa w tle, bez korzystania z cookies, haseł ani profilu przeglądarki użytkownika. Kod wykorzystuje zainstalowaną przeglądarkę Edge lub przeglądarkę Playwright. Nie stosuje trybu ukrywania automatyzacji ani obchodzenia CAPTCHA.
+
+Przed wysyłką ponownie sprawdza stronę oferty: zgodność pracodawcy i stanowiska, aktualne widełki brutto UoP, współrzędne oraz wymagania ustawione w panelu. Wgrywa aktualny PDF z portfolio i wiadomość opartą na profilu z aktualnym minimum płacowym. Nie zaznacza rejestracji konta ani marketingu. Wymagane dodatkowe pytania, regulaminy lub widoczna CAPTCHA dają status do ręcznej obsługi.
+
+Zamiar wysłania jest zapisywany przed kliknięciem, aby przerwanie procesu nie spowodowało ponowienia. Sukces wymaga komunikatu o wysłaniu do tego samego pracodawcy. Brak potwierdzenia daje status niepewny i blokuje automatyczne ponowienie. Rejestrowane są nazwa CV, jego SHA-256 oraz — jeśli zapis jest możliwy — zrzut ekranu w prywatnym katalogu evidence obok state.json.
+
+Mechanizm przetestowano na lokalnych formularzach: poprawna wysyłka, wyłączone opcjonalne zgody, wymagany regulamin, dodatkowe pytania i brak potwierdzenia. Nie wykonano nim nowej rzeczywistej wysyłki; wcześniejsza aplikacja w historii została wysłana przez asystenta w przeglądarce. Nie oznacza to jeszcze zweryfikowanej produkcyjnie automatyzacji wszystkich sześciu portali.

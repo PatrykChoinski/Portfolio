@@ -5,7 +5,8 @@ import {homedir} from 'node:os';
 import {fileURLToPath} from 'node:url';
 import {randomBytes} from 'node:crypto';
 import {defaults,candidate,normalize,assess,collect,applicationText} from './core.mjs';
-import {portals,accountStates} from './portals.mjs';
+import {portals,accountStates,portalFor} from './portals.mjs';
+import {submitRocket} from './rocket-apply.mjs';
 const directory=resolve(process.env.JOB_AGENT_HOME||join(homedir(),'.portfolio-job-agent'));
 const here=fileURLToPath(new URL('.',import.meta.url));
 const token=randomBytes(32).toString('hex');
@@ -20,18 +21,23 @@ async function scan(){
  state.sources=[];
  for(const source of state.config.sources){const name=source.type==='portal'?portals.find(p=>p.id===source.portal)?.name:source.board;try{const result=await collect(source),jobs=Array.isArray(result)?result:result.jobs;merge(jobs);state.sources.push({name,count:jobs.length,coverage:result.coverage||'Tablica pracodawcy',failures:result.failures||[],at:new Date().toISOString(),ok:true});}catch(e){state.sources.push({name,ok:false,error:e.message,at:new Date().toISOString()});}await save();}
  event(null,'scan',`Sprawdzono źródeł: ${state.sources.length}`);await save();
- if(state.config.autoApply)for(const job of state.jobs)if(job.status==='new'&&assess(job,state.config).eligible)await apply(job);
+ if(state.config.autoApply)for(const job of state.jobs)if(job.status==='new'&&assess(job,state.config).eligible){try{await apply(job);}catch(e){event(job,'error',e.message);await save();}}
 }
 async function apply(job){
  if(!assess(job,state.config).eligible)throw Error('Oferta nie spełnia wymagań lub wymaga weryfikacji');
  if(['sent','browser-sent','manual-sent','interview','rejected','withdrawn','sending','uncertain'].includes(job.status))throw Error('Aplikacja już obsłużona lub wymaga sprawdzenia potwierdzenia');
+ if(portalFor(job.url)?.id==='rocketjobs'){
+  let result;
+  try{result=await submitRocket({job,config:state.config,candidate,cvPath:join(here,'../public/cv/Patryk-Choinski-CV.pdf'),message:applicationText(job,state.config),evidenceDirectory:join(directory,'evidence'),beforeSubmit:async({cvSha256,live})=>{job.status='sending';job.application={via:'browser',startedAt:new Date().toISOString(),cvSha256,cv:'Patryk-Choinski-CV.pdf',url:job.url};event(job,'sending',`Rozpoczęto wysyłkę przez RocketJobs. Sprawdzono ${live.salary.min}–${live.salary.max} PLN brutto UoP i ${live.assessment.distanceKm.toFixed(1)} km od Warszawy.`);await save();}});}catch(e){result={status:job.status==='sending'?'uncertain':'review',detail:e.message};}
+  job.status=result.status;job.application={...job.application,via:'browser',at:new Date().toISOString(),url:job.url,cv:'Patryk-Choinski-CV.pdf',cvSha256:result.cvSha256||job.application?.cvSha256,...result};event(job,result.status,result.receipt||result.detail);await save();return;
+ }
  const gh=job.greenhouse,key=gh&&process.env[`GREENHOUSE_KEY_${gh.board.toUpperCase().replaceAll('-','_')}`];
  if(!gh||!key){job.status='prepared';event(job,'prepared','Przygotowano treść. Wysyłka wymaga formularza portalu lub klucza API pracodawcy.');await save();return;}
  if(!/^[a-z0-9-]+$/i.test(gh.board)||!/^\d+$/.test(String(gh.id)))throw Error('Nieprawidłowy identyfikator Greenhouse');
  const endpoint=`https://boards-api.greenhouse.io/v1/boards/${gh.board}/jobs/${gh.id}`;
  const response=await fetch(endpoint,{signal:AbortSignal.timeout(20000)});if(!response.ok)throw Error(`Formularz HTTP ${response.status}`);
  const form=await response.json();
- const payload={first_name:'Patryk',last_name:'Choiński',email:candidate.email,phone:candidate.phone,resume_text:[candidate.summary,...candidate.experience.map(e=>`${e.period}: ${e.role}, ${e.company}. ${e.description}`),candidate.skills.join(', ')].join('\n'),cover_letter_text:applicationText(job)};
+ const payload={first_name:'Patryk',last_name:'Choiński',email:candidate.email,phone:candidate.phone,resume_text:[candidate.summary,...candidate.experience.map(e=>`${e.period}: ${e.role}, ${e.company}. ${e.description}`),candidate.skills.join(', ')].join('\n'),cover_letter_text:applicationText(job,state.config)};
  const unanswered=[...(form.questions||[]),...(form.location_questions||[]),...(form.compliance||[])].filter(q=>q.required&&!(q.fields||[]).every(f=>Object.hasOwn(payload,f.name)));
  if(unanswered.length||form.data_compliance?.length||form.demographic_questions){job.status='review';event(job,'review','Formularz zawiera dodatkowe pytania lub zgody. Wymaga ręcznego uzupełnienia.');await save();return;}
  job.status='sending';event(job,'sending','Rozpoczęto wysyłkę');await save();
@@ -47,7 +53,7 @@ const server=createServer(async(req,res)=>{
  if(req.method==='GET'&&path==='/app.mjs'){res.writeHead(200,{'Content-Type':'text/javascript'});return res.end(await readFile(join(here,'app.mjs')));}
  if(req.method==='GET'&&path==='/portal-ui.mjs'){res.writeHead(200,{'Content-Type':'text/javascript'});return res.end(await readFile(join(here,'portal-ui.mjs')));}
  if(req.method==='GET'&&path==='/cv.pdf'){res.writeHead(200,{'Content-Type':'application/pdf','Content-Disposition':'attachment; filename="Patryk-Choinski-CV.pdf"'});return res.end(await readFile(join(here,'../public/cv/Patryk-Choinski-CV.pdf')));}
- if(req.method==='GET'&&path==='/api/state')return output(res,200,{...state,portals:portals.map(({jobPath,...p})=>({...p,account:state.accounts[p.id]||{status:'unknown'},accountUrl:p.account})),accountStates,config:{...state.config},candidate:{name:candidate.name,summary:candidate.summary,skills:candidate.skills},jobs:state.jobs.map(j=>({...j,assessment:assess(j,state.config),draft:applicationText(j)}))});
+ if(req.method==='GET'&&path==='/api/state')return output(res,200,{...state,portals:portals.map(({jobPath,...p})=>({...p,account:state.accounts[p.id]||{status:'unknown'},accountUrl:p.account})),accountStates,config:{...state.config},candidate:{name:candidate.name,summary:candidate.summary,skills:candidate.skills},jobs:state.jobs.map(j=>({...j,assessment:assess(j,state.config),draft:applicationText(j,state.config)}))});
  if(req.method!=='POST'||req.headers['x-agent-token']!==token)return output(res,403,{error:'Brak dostępu'});
  if(busy)return output(res,409,{error:'Operacja w toku'});
  let bytes=0,parts=[];for await(const part of req){bytes+=part.length;if(bytes>2000000)return output(res,413,{error:'Plik za duży'});parts.push(part);}const body=JSON.parse(Buffer.concat(parts).toString()||'{}');

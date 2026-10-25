@@ -1,6 +1,6 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {normalize,assess,distance,collect} from '../job-agent/core.mjs';
+import {normalize,assess,distance,collect,applicationText} from '../job-agent/core.mjs';
 import {portals,jobLinks,jobPostings,fromPosting,collectPortal,nextPage,grossEmploymentSalary,pageCoordinates} from '../job-agent/portals.mjs';
 const raw={title:'Programista PLC',url:'https://example.com/jobs/1',latitude:52.23,longitude:21.01,salary:{min:15000,max:19000,currency:'PLN',basis:'gross',period:'month',contract:'employment'}};
 test('only confirmed salary and location qualify',()=>{
@@ -8,6 +8,9 @@ test('only confirmed salary and location qualify',()=>{
  for(const delta of [{salary:null},{latitude:undefined},{salary:{...raw.salary,basis:'net'}},{salary:{...raw.salary,contract:'b2b'}},{salary:{...raw.salary,min:14000}},{longitude:18},{title:'Accountant'}])assert.equal(assess(normalize({...raw,...delta},'test')).eligible,false);
  assert.equal(distance(undefined,21),null);
  assert.equal(distance(52.2297,21.0122),0);
+});
+test('application message respects the configured salary requirement',()=>{
+ assert.match(applicationText(raw,{minimumSalary:20000}).replace(/\s/g,''),/20000PLNbrutto/);
 });
 test('tracking parameters do not create duplicates and unsafe URLs fail',()=>{
  assert.equal(normalize(raw,'a').id,normalize({...raw,url:raw.url+'?utm_source=x#top'},'b').id);
