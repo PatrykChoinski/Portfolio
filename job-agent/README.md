@@ -12,7 +12,7 @@ Dane są zapisywane atomowo w `%USERPROFILE%/.portfolio-job-agent/state.json`, p
 
 Minimum 15 000 PLN **brutto miesięcznie na umowie o pracę**, dolna granica widełek. B2B, netto, waluty obce i nieznane widełki wymagają weryfikacji. Maksymalnie 100 km w linii prostej od centrum Warszawy (52.2297, 21.0122), nie odległość drogowa. Nieznane współrzędne również wymagają weryfikacji. Kryteria można zaostrzać w panelu.
 
-Ocena kompetencji to dopasowanie słów kluczowych do udokumentowanych obszarów PLC/HMI/SCADA/motion, z dodatkowym sprawdzeniem kontekstu automatyki przemysłowej. Samo słowo „motion” albo automatyzacja procesów finansowych nie wystarczają. To nadal filtr wstępny, nie pełna ocena wymagań. Oferty wygasłe są blokowane.
+Ocena kompetencji to dopasowanie słów kluczowych do udokumentowanych obszarów PLC/HMI/SCADA/motion, z dodatkowym sprawdzeniem kontekstu automatyki przemysłowej. Samo słowo „motion” albo automatyzacja procesów finansowych nie wystarczają. Jawna lista wymaganych umiejętności (obecnie dostępna w adapterze No Fluff Jobs) jest porównywana z kompetencjami z CV. Brak potwierdzenia choćby jednej pozycji kieruje ofertę do weryfikacji. Rozpoznawane są dokładne nazwy i wybrane równoważne zapisy, np. NodeJS/Node.js; Java nie jest uznawana za JavaScript. To nadal filtr wstępny, nie pełna ocena wymagań opisanych wyłącznie swobodnym tekstem. Oferty wygasłe są blokowane.
 
 W szczegółach oferty można uzupełnić potwierdzone widełki brutto UoP i współrzędne. Wymagane jest wskazanie podstawy potwierdzenia. Nowa treść pobrana ze źródła lub potwierdzenie starsze niż 7 dni wymusza ponowną weryfikację. Narzędzie nie zgaduje współrzędnych na podstawie nazwy miasta i nie uznaje FULL_TIME w danych strukturalnych za dowód UoP ani wynagrodzenia brutto.
 

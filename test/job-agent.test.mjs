@@ -3,6 +3,14 @@ import assert from 'node:assert/strict';
 import {normalize,assess,distance,collect,applicationText} from '../job-agent/core.mjs';
 import {portals,jobLinks,jobPostings,fromPosting,collectPortal,nextPage,grossEmploymentSalary,pageCoordinates} from '../job-agent/portals.mjs';
 const raw={title:'Programista PLC',url:'https://example.com/jobs/1',latitude:52.23,longitude:21.01,salary:{min:15000,max:19000,currency:'PLN',basis:'gross',period:'month',contract:'employment'}};
+test('explicit mandatory skills must be supported by CV, with exact technology aliases',()=>{
+ assert.equal(assess(normalize({...raw,requiredSkills:['PLC','NodeJS','Modbus','ST']},'test')).eligible,true);
+ const job=normalize({...raw,requiredSkills:['PLC','SolidWorks','Ansys','C++']},'test');
+ assert.deepEqual(job.requiredSkills,['PLC','SolidWorks','Ansys','C++']);
+ assert.equal(assess(job).eligible,false);assert.match(assess(job).reasons.join(' '),/SolidWorks, Ansys, C\+\+/);
+ assert.equal(assess(normalize({...raw,requiredSkills:['Java']},'test')).eligible,false);
+ assert.deepEqual(normalize({...raw,requiredSkills:[null,{},'PLC','PLC','  ']},'test').requiredSkills,['PLC']);
+});
 test('only confirmed salary and location qualify',()=>{
  assert.equal(assess(normalize(raw,'test')).eligible,true);
  for(const delta of [{salary:null},{latitude:undefined},{salary:{...raw.salary,basis:'net'}},{salary:{...raw.salary,contract:'b2b'}},{salary:{...raw.salary,min:14000}},{longitude:18},{title:'Accountant'}])assert.equal(assess(normalize({...raw,...delta},'test')).eligible,false);
@@ -92,4 +100,12 @@ test('No Fluff salary and coordinates exclude recommendations and mismatched loc
  assert.equal(pageCoordinates(page(state),url,'Warszawa'),null);
  assert.equal(grossEmploymentSalary('18 000 – 22 000 PLN brutto miesięcznie (UoP)').min,18000);
  assert.equal(grossEmploymentSalary('18 000 – 22 000 PLN netto miesięcznie (B2B)'),null);
+});
+test('No Fluff collection carries employer mandatory skills into eligibility assessment',async()=>{
+ const url='https://nofluffjobs.com/pl/job/plc-engineer',company='Firma z branży automatyki';
+ const posting={'@type':'JobPosting',title:'Inżynier automatyki',hiringOrganization:{name:company},jobLocation:{address:{addressLocality:'Warszawa'}},description:'PLC SCADA'};
+ const details={postingUrl:'plc-engineer',title:posting.title,company:{name:company},requirements:{description:'Obowiązkowe narzędzia projektowe',musts:[{value:'PLC'},{value:'SolidWorks'}]},location:{places:[{url:'plc-engineer',city:'Warszawa',geoLocation:{latitude:52.23,longitude:21.01}}]}};
+ const html='<script type="application/ld+json">'+JSON.stringify(posting)+'</script><script id="serverApp-state" type="application/json">'+JSON.stringify({'/posting/plc-engineer?region=pl':details})+'</script>18 000 – 22 000 PLN brutto miesięcznie (UoP)';
+ const result=await collectPortal('nofluffjobs',normalize,async address=>({ok:true,text:async()=>address===url?html:'<a href="'+url+'">Oferta</a>'}));
+ const job=result.jobs[0];assert.equal(job.salary.min,18000);assert.equal(job.latitude,52.23);assert.deepEqual(job.requiredSkills,['PLC','SolidWorks']);assert.match(job.description,/Obowiązkowe narzędzia/);assert.equal(assess(job).eligible,false);
 });
