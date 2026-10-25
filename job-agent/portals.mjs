@@ -35,8 +35,9 @@ export function nextPage(html,current,portal){
 export function grossEmploymentSalary(html){
  const text=cleanText(html).split(/podobne oferty|similar jobs|polecane oferty/i)[0],matches=new Map();
  // Only an explicit range followed by gross/month/UoP labels proves these conditions.
- const pattern=/([0-9][0-9\s\u00a0\u202f]*(?:[.,][0-9]{1,2})?)\s*[-–]\s*([0-9][0-9\s\u00a0\u202f]*(?:[.,][0-9]{1,2})?)\s*(?:PLN|zł)\s+Brutto\s+miesięcznie\s*(?:[-–]\s*UoP\b|\(\s*UoP\s*\))/gi;
- for(const match of text.matchAll(pattern)){
+ const patterns=[/([0-9][0-9\s\u00a0\u202f]*(?:[.,][0-9]{1,2})?)\s*[-–]\s*([0-9][0-9\s\u00a0\u202f]*(?:[.,][0-9]{1,2})?)\s*(?:PLN|zł)\s+Brutto\s+miesięcznie\s*(?:[-–]\s*UoP\b|\(\s*UoP\s*\))/gi,
+ /Wynagrodzenie\s+([0-9][0-9\s\u00a0\u202f]*(?:[.,][0-9]{1,2})?)\s+do\s+([0-9][0-9\s\u00a0\u202f]*(?:[.,][0-9]{1,2})?)\s+zł\s+brutto\s*\/\s*mies\.\s+Umowa o pracę(?=\s|$)/gi];
+ for(const pattern of patterns)for(const match of text.matchAll(pattern)){
   const number=s=>Number(s.replace(/[\s\u00a0\u202f]/g,'').replace(',','.')),min=number(match[1]),max=number(match[2]);
   if(min>0&&max>=min)matches.set(`${min}:${max}`,{min,max,currency:'PLN',period:'month',basis:'gross',contract:'employment',evidence:match[0]});
  }

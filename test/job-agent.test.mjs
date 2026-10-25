@@ -68,6 +68,11 @@ test('gross UoP extraction distinguishes B2B, ambiguity and recommended jobs',()
  assert.equal(grossEmploymentSalary('17 000 - 22 000 PLN Brutto miesięcznie - UoP 19 000 - 24 000 PLN Brutto miesięcznie - UoP'),null);
  assert.equal(grossEmploymentSalary('Wynagrodzenie nieujawnione Podobne oferty 17 000 - 22 000 PLN Brutto miesięcznie - UoP'),null);
 });
+test('Aplikuj salary requires adjacent monthly gross and employment labels',()=>{
+ assert.equal(grossEmploymentSalary('Wynagrodzenie 20 000 do 22 500 zł brutto / mies. Umowa o pracę').min,20000);
+ for(const text of ['Wynagrodzenie 20 000 do 22 500 zł netto / mies. Umowa o pracę','Wynagrodzenie 20 000 do 22 500 zł brutto / rok Umowa o pracę','Wynagrodzenie 20 000 do 22 500 zł brutto / mies. B2B','Wynagrodzenie do 22 500 zł brutto / mies. Umowa o pracę','Podobne oferty pracy Wynagrodzenie 20 000 do 22 500 zł brutto / mies. Umowa o pracę'])assert.equal(grossEmploymentSalary(text),null);
+ assert.equal(grossEmploymentSalary('Wynagrodzenie 20 000 do 22 500 zł brutto / mies. Umowa o pracę Wynagrodzenie 15 000 do 18 000 zł brutto / mies. Umowa o pracę'),null);
+});
 test('coordinates belong to the exact job slug and city, never a recommendation',()=>{
  const url='https://rocketjobs.pl/oferta-pracy/plc-warszawa';
  const page=value=>'<script>self.__next_f.push('+JSON.stringify([1,'1:'+JSON.stringify(value)+'\n'])+')</script>';

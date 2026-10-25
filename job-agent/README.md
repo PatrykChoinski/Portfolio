@@ -23,7 +23,7 @@ W szczegółach oferty można uzupełnić potwierdzone widełki brutto UoP i wsp
 | Pracuj.pl | Wyszukiwanie „automatyk, Warszawa”; w sprawdzeniu na żywo HTTP 403 | Wymaga przeglądarki i konta; brak automatycznego adaptera wysyłki |
 | RocketJobs | Kategoria automatyka, widoczne strony „Następna”, do 10 stron i 500 szczegółów | Lokalna wysyłka rozpoznanym formularzem bez konta; dodatkowe wymagania zatrzymują wysyłkę |
 | No Fluff Jobs | Kategoria automatyka, pierwsza strona; jawne widełki brutto UoP, współrzędne i wymagania bieżącej oferty | Wymaga formularza portalu; brak automatycznego adaptera wysyłki |
-| Aplikuj.pl | Wyszukiwanie automatyk w Warszawie, widoczne strony „Następna”, do 10 stron i 500 szczegółów; zawiera też reklamy innych zawodów | Wymaga formularza portalu; brak automatycznego adaptera wysyłki |
+| Aplikuj.pl | Wyszukiwanie automatyk w Warszawie, widoczne strony „Następna”, do 10 stron i 500 szczegółów; zawiera też reklamy innych zawodów; jawne widełki brutto miesięcznie na UoP | Wymaga formularza portalu; brak automatycznego adaptera wysyłki |
 | LinkedIn | Obsługa przez zalogowaną przeglądarkę, bez adaptera serwerowego | Wymaga aktywnej sesji; istniejącego profilu nie należy dublować |
 | Jooble | Brak adaptera; API agregatora wymaga osobnego klucza | Konto kandydata nie jest kluczem API; oferty mogą przekierowywać do innych portali |
 
