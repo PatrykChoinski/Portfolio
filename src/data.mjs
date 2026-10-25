@@ -138,3 +138,41 @@ export const controlSystem = {
   {id:'inverter-2',name:'Falownik 2',tag:'SILNIK 2',kind:'inverter',network:'ethercat',x:960,y:330,w:130,h:165,description:'Niezależny napęd drugiego silnika połączony z PLC przez EtherCAT. Sterownik przekazuje polecenia pracy i nastawy oraz odczytuje stan napędu.'}
  ]
 };
+
+export const cvLabels = {
+ pl:{industry:'AUTOMATYKA PRZEMYSŁOWA',print:'Drukuj / zapisz jako PDF',profiles:'Profile zawodowe',summary:'Profil zawodowy',experience:'Doświadczenie zawodowe',skills:'Kompetencje techniczne',pageTitle:'Od sterowania do aplikacji.',projects:'Wybrane aplikacje i projekty',support:'IT jako wsparcie automatyki',education:'Wykształcenie',training:'Języki i szkolenia',trainingText:'Angielski B2. Szkolenia: SEP do 1 kV (2019), bezpieczeństwo maszyn EN 60204-1 (2022), pierwsza pomoc (2023).',note:'Daty szkoleń według CV. Opisy firm są zanonimizowane. Szczegóły aplikacji, materiały i demonstracje: portfolio.',footerIndustry:'Automatyka przemysłowa'},
+ en:{industry:'INDUSTRIAL AUTOMATION',print:'Print / save as PDF',profiles:'Professional profiles',summary:'Professional profile',experience:'Professional experience',skills:'Technical skills',pageTitle:'From control logic to working applications.',projects:'Selected applications and projects',support:'IT supporting industrial automation',education:'Education',training:'Languages and training',trainingText:'English: B2. Training: electrical safety up to 1 kV (SEP, 2019); machine safety, EN 60204-1 (2022); first aid (2023).',note:'Training dates as listed in the CV. Company names are anonymised. Application details, materials and demonstrations are available in the portfolio.',footerIndustry:'Industrial automation'}
+};
+const englishProjectContent = {
+ 'mould-care':{title:'Mould cooling channel cleaning and diagnostics',sector:'Company in the injection mould servicing sector',description:'I programmed the PLC and HMI for a machine used to clean and diagnose injection mould cooling channels.'},
+ 'blinds-4000':{title:'Automated window blind production',sector:'Company in the blind manufacturing machinery sector',description:'I programmed the control system for an automated window blind production machine.'},
+ 'blow-moulding-4000':{title:'Plastic packaging production',sector:'Company in the plastics processing machinery sector',description:'I programmed the PLC and HMI for a machine producing plastic packaging.'},
+ 'stone-control':{title:'Stone processing machine control',sector:'Company in the stone processing machinery sector',description:'I programmed the PLC, HMI, servo drive and variable frequency drive control for a stone processing machine.'},
+ 'packaging-control':{title:'Packaging machine automation',sector:'Company in the packaging machinery sector',description:'I programmed control systems for cardboard packaging production machines.'},
+ 'plc-ci':{title:'Automated PLC application verification',sector:'Company in the industrial automation sector',description:'I programmed automated build, deployment and testing workflows for PLC applications.'},
+ 'process':{title:'Process control, recipes and reporting',sector:'Company in the industrial mixing systems sector',description:'I programmed a SCADA application for a mixing process, including historical data and reporting.'}
+};
+export const cvEnglish = {
+ profile:{...profile,title:'Field Application Engineer · Industrial automation',summary:'I specialise in industrial automation applications: PLC, HMI, SCADA, motion control and drives. I connect controller logic with machine operation, actuators and operator interfaces. I use IT tools for data integration, visualisation and test automation.'},
+ experience:[
+ {period:'03.2020 - present',role:'Field Application Engineer',company:'Company in the industrial automation sector',description:'Developing PLC, HMI and motion control applications for stone, packaging and woodworking machines, as well as other industrial processes. Integrating servo drives, variable frequency drives and pneumatic systems.'},
+ {period:'10.2018 - 03.2020',role:'Technical Support Engineer',company:'Company in the industrial automation sector',description:'Technical support for PLC, HMI, SCADA, drives, motion controllers and Delta robots.'},
+ {period:'07.2017 - 08.2017',role:'Engineering intern',company:'Company in the automotive sector',description:'Programming Mitsubishi PLCs and Fanuc robots, and working on electrical systems.'}
+ ],
+ education:[{period:'2014 - 2018',title:'Automation and Robotics - engineering studies',school:'Warsaw University of Technology'},{period:'2019 - 2020',title:'Computer Science - period of study listed in the CV',school:'Warsaw University of Technology'}],
+ skills:[
+ ['PLC programming',['PLC','Structured Text']],
+ ['Motion control',['Positioning','Axis homing','Interpolation','Motion profiles']],
+ ['Servo drives and variable frequency drives',['Servo drives','Variable frequency drives','Encoders']],
+ ['HMI operator panels',['HMI','Manual / automatic modes','Machine parameters']],
+ ['Temperature controllers',['PID','Hysteresis control']],
+ ['SCADA and process data',['SCADA','Recipes','Trends and reports']],
+ ['Robotics and electrical engineering',['Robots','Pneumatics','Electrical systems']],
+ ['Industrial communication',['EtherCAT','CANopen','EtherNet/IP','Modbus TCP','Modbus RTU','OPC UA']],
+ ['Web visualisation and tools',['JavaScript','Node.js','WebGL','HTML','CSS','SSE']],
+ ['Databases and integrations',['SQL Server','PostgreSQL','SQL','SQLite']],
+ ['AI in engineering workflows',['Claude','Codex','AI']],
+ ['Scripting and automated tests',['Python','PowerShell','Git','GitHub Actions','CI/CD','JUnit']]
+ ].map(([group,items],index)=>({group,items,area:skills[index].area})),
+ projects:projects.map(p=>({id:p.id,...englishProjectContent[p.id]}))
+};

@@ -33,7 +33,7 @@ test('GA4 loads only after consent, sends one pageview and useful events without
  await expect.poll(()=>tagLoads).toBe(1);
  await page.getByRole('searchbox').fill('private@example.com');await page.getByRole('searchbox').fill('');
  await page.getByRole('button',{name:'Szczegóły: PLC z automatyczną weryfikacją'}).click();await page.keyboard.press('Escape');
- await page.locator('a[href^="mailto:"]').click();await page.locator('a[href^="tel:"]').click();await page.locator('a[download]').click();
+ await page.locator('a[href^="mailto:"]').click();await page.locator('a[href^="tel:"]').click();await page.locator('a[download]').first().click();
  const commands=await page.evaluate(()=>window.dataLayer.map(args=>Array.from(args))),events=commands.filter(args=>args[0]==='event');
  expect(events.filter(e=>e[1]==='page_view')).toHaveLength(1);expect(events.map(e=>e[1])).toEqual(expect.arrayContaining(['project_search','project_open','contact_click','cv_download']));
  expect(JSON.stringify(commands)).not.toContain('private@example.com');expect(JSON.stringify(events)).not.toContain('patryk@');

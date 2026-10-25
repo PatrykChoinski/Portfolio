@@ -6,7 +6,7 @@ test('GitHub profile, real calendar and commit links appear at the bottom with h
  expect(await section.locator('.github-commits li').count()).toBeGreaterThan(0);
  await expect(section.locator('.github-stats')).not.toContainText('godzin');
  expect(await section.evaluate(el=>el.nextElementSibling===document.querySelector('.experience-section'))).toBeTruthy();
- for(const link of await page.locator('a[href="https://github.com/PatrykChoinski"]').all())await expect(link).toHaveClass(/github-cta/);
+ for(const link of await page.locator('a[href="https://github.com/PatrykChoinski"]:not(.header-contacts a)').all())await expect(link).toHaveClass(/github-cta/);
  await page.setViewportSize({width:390,height:844});expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBeTruthy();
 });
 

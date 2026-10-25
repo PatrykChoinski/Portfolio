@@ -13,3 +13,13 @@ test('all published media have local files and source attribution',async()=>{for
 test('SCADA demo generates bounded finite signals without using operational data',()=>{for(const t of [0,12,45,78,90])for(const batch of [1,2])for(const key of ['mixer','speed','current','stamp','drain','inlet'])assert.ok(Number.isFinite(sampleSignal(key,t,batch)));assert.equal(sampleSignal('inlet',0),0);assert.equal(sampleSignal('drain',90),100);assert.notEqual(sampleSignal('mixer',45,1),sampleSignal('mixer',45,2));});
 
 test('pipeline replay preserves actual outcomes and skips deployment after compile failure',()=>{const failure=pipelineRuns.find(r=>r.result==='failure');assert.equal(failure.steps[1].result,'failure');assert.equal(failure.steps[2].result,'skipped');assert.equal(failure.steps[3].result,'skipped');for(const run of pipelineRuns){assert.match(run.url,/github.com\/PatrykChoinski\/Codesys-CI-CD\/actions\/runs\/\d+/);for(const step of run.steps)assert.ok(Number.isFinite(step.seconds)&&step.seconds>=0);}});
+
+// Both languages are generated from the same documented scope, without missing projects.
+test('English CV covers all projects, skills and career entries',async()=>{
+ const {cvEnglish,experience,education}=await import('../src/data.mjs');
+ assert.deepEqual(cvEnglish.projects.map(p=>p.id),projects.map(p=>p.id));
+ assert.equal(cvEnglish.skills.length,skills.length);assert.equal(cvEnglish.experience.length,experience.length);assert.equal(cvEnglish.education.length,education.length);
+ for(const project of cvEnglish.projects)assert.ok(project.title&&project.description&&project.sector);
+ const english=generateCvHtml('en');for(const project of cvEnglish.projects){assert.ok(english.includes(project.title));assert.ok(english.includes(project.description));}
+ assert.match(english,/<html lang="en">/);assert.doesNotMatch(english,/Firma z branży|Profil zawodowy|Wykształcenie/);assert.throws(()=>generateCvHtml('de'),/Unsupported/);
+});

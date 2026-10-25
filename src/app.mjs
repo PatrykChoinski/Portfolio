@@ -1,3 +1,4 @@
+import {initContactLinks} from './contact-links.mjs';
 import {initGithubActivity} from './github-activity.mjs';
 import {initControlSystem} from './control-system.mjs';
 import {initVideoExcerpt} from './video-excerpt.mjs';
@@ -7,6 +8,7 @@ import { portfolioScreenshots, profile, projects, skills, experience, applicatio
 import {initPipeline} from './pipeline-demo.mjs';
 import {initScada} from './scada-demo.mjs';
 const escape = s => String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+initContactLinks();
 let category = 'Wszystkie';
 const categories = ['Wszystkie', ...new Set(projects.map(p=>p.category))];
 const filters = document.querySelector('#filters');
@@ -40,7 +42,6 @@ const logoCard=logo=>`<div class="technology-logo"><img src="${logo.src}" alt=""
 if(!document.querySelector('.automation-logos')) document.querySelector('#kompetencje .section-head').insertAdjacentHTML('afterend',`<div class="technology-logos automation-logos" aria-label="Oprogramowanie automatyki">${technologyLogos.filter(l=>l.area==='automation').map(logoCard).join('')}</div>`);
 if(!document.querySelector('.support-logos')) document.querySelector('.support-area').insertAdjacentHTML('beforeend',`<div class="technology-logos support-logos" aria-label="Narzędzia uzupełniające">${technologyLogos.filter(l=>l.area!=='automation').map(logoCard).join('')}</div>`);
 if(!document.querySelector('#automatyka')) document.querySelector('#kompetencje').insertAdjacentHTML('beforebegin',`<section id="automatyka" class="section application-areas"><div class="section-head"><div><p class="eyebrow">GŁÓWNY OBSZAR PRACY</p><h2>Aplikacje dla przemysłu.</h2></div><p>PLC, HMI, motion, napędy i pneumatyka.<br>Doświadczenie w różnych typach maszyn.</p></div><div class="application-grid">${applicationAreas.map((area,i)=>`<div><span>${String(i+1).padStart(2,'0')}</span><h3>${area}</h3></div>`).join('')}</div></section>`);
-if(!document.querySelector('.contact-details')) document.querySelector('#cv .actions').insertAdjacentHTML('afterend',`<p class="contact-details"><a href="mailto:${profile.email}">${profile.email}</a> &nbsp; / &nbsp; <a href="tel:+48696568545">${profile.phone}</a></p>`);
 if(!document.querySelector('.experience-section')) document.querySelector('#cv').insertAdjacentHTML('beforebegin',`<section class="section experience-section"><div class="section-head"><div><p class="eyebrow">DOŚWIADCZENIE</p><h2>Praktyka inżynierska.</h2></div></div><div class="experience-grid">${experience.map(e=>`<article class="experience-item"><small>${escape(e.period)}</small><h3>${escape(e.role)}</h3><p class="card-sector">${escape(e.company)}</p><p>${escape(e.description)}</p></article>`).join('')}</div></section>`);
 render();
 if(!document.querySelector('#dema')) document.querySelector('#projekty').insertAdjacentHTML('beforebegin',`<section id="dema" class="section demo-section"><div class="section-head"><div><p class="eyebrow">APLIKACJE W DZIAŁANIU</p><h2>${interactiveDemos.visu.title}</h2></div><p>${interactiveDemos.visu.description}</p></div><div class="demo-video" aria-label="Ruch maszyny w 3D"><button type="button">Odtwórz film</button></div><div class="demo-links"><button type="button" id="load-simulator">Uruchom pełny symulator tutaj ↗</button><a class="text-link" href="${interactiveDemos.visu.url}" target="_blank" rel="noopener noreferrer">Otwórz aplikację w nowej karcie ↗</a></div><div id="simulator-slot"></div><div class="section-head"><div><p class="eyebrow">SCADA / DANE PROCESOWE</p><h2>${interactiveDemos.scada.title}</h2></div></div><p class="scada-intro">${interactiveDemos.scada.description}</p><div id="scada-demo"></div></section>`);
@@ -55,5 +56,5 @@ if(!document.querySelector('.equipment-strip')) document.querySelector('#automat
 
 initControlSystem();
 await initGithubActivity();
-document.querySelectorAll('a[href="https://github.com/PatrykChoinski"]').forEach(link=>link.classList.add('github-cta'));
+document.querySelectorAll('a[href="https://github.com/PatrykChoinski"]:not(.header-contacts a)').forEach(link=>link.classList.add('github-cta'));
 initAnalytics();

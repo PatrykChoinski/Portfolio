@@ -28,6 +28,7 @@ await writeFile('dist/sitemap.xml',sitemap());
 await writeFile('dist/robots.txt',`User-agent: *\nAllow: /Portfolio/\nSitemap: ${site.url}sitemap.xml\n`);
 await mkdir('dist/public/cv',{recursive:true});
 await writeFile('dist/public/cv/index.html',generateCvHtml());
+await writeFile('dist/public/cv/index-en.html',generateCvHtml('en'));
 await writeFile('dist/.nojekyll','');
 // Produce readable HTML for crawlers and visitors without JavaScript.
 const preview=createStaticServer('dist');
