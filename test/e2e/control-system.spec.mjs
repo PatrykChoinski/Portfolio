@@ -6,6 +6,9 @@ test('control architecture shows every device and supports keyboard selection',a
  await expect(section.locator('[data-device]')).toHaveCount(9);
  await expect(section.locator('[data-device^="servo-"]')).toHaveCount(3);
  await expect(section.locator('[data-device^="inverter-"]')).toHaveCount(2);
+ await expect(section.locator('[data-device^="inverter-"][data-network="ethercat"]')).toHaveCount(2);
+ await expect(section.locator('[data-device="temperature"]')).toHaveAttribute('data-network','modbus');
+ await expect(section.locator('[data-network="modbus"].control-device')).toHaveCount(1);
  for(const device of controlSystem.devices){
   const button=section.locator(`[data-device="${device.id}"]`);
   await button.focus();await page.keyboard.press('Enter');
