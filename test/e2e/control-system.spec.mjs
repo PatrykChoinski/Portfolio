@@ -20,7 +20,12 @@ test('control architecture shows every device and supports keyboard selection',a
  await expect(section.getByRole('link',{name:/dokumentacja producenta/})).toHaveAttribute('href',controlSystem.devices.find(d=>d.id==='eb80').source);
  await expect(section.getByRole('link',{name:/dokumentacja producenta/})).toHaveCSS('color','rgb(194, 249, 112)');
  await expect(section.locator('[aria-pressed="true"]')).toHaveCount(1);
- await expect(section.locator('.control-note')).toContainText('Schemat poglądowy');
+ await expect(page.locator('#automatyka #system-sterowania')).toHaveCount(1);
+ await expect(section).not.toContainText('Schemat poglądowy');
+ await expect(section).not.toContainText('Przykładowa architektura');
+ await expect(section.locator('.control-wires')).not.toContainText('EtherCAT');
+ await expect(page.locator('.protocol-logos .technology-logo')).toHaveCount(6);
+ await expect(page.locator('.protocol-logos img').first()).toHaveCSS('width','36px');
  await expect(section.locator('.control-legend>div')).toHaveCount(3);
  const outside=await section.locator('[data-device]').evaluateAll(els=>els.filter(el=>{const r=el.getBoundingClientRect(),p=el.parentElement.getBoundingClientRect();return r.left<p.left||r.right>p.right||r.top<p.top||r.bottom>p.bottom}).map(el=>el.dataset.device));
  expect(outside).toEqual([]);

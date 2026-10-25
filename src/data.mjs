@@ -125,8 +125,6 @@ export const githubProfile={username:'PatrykChoinski',activityUrl:'https://githu
 
 export const controlSystem = {
  title:'Jeden system. Wiele elementów.',
- description:'Przykładowa architektura sterowania maszyną: od panelu operatora, przez PLC, po ruch osi, pneumatykę i regulację temperatury.',
- note:'Schemat poglądowy połączeń komunikacyjnych. Pokazuje role urządzeń, bez obwodów zasilania i bezpieczeństwa. Przyjęto wariant EB80 z interfejsem EtherCAT oraz napędy i regulator z odpowiednimi interfejsami.',
  networks:[{id:'ethernet',label:'Ethernet',description:'Panel operatorski ↔ PLC'},{id:'ethercat',label:'EtherCAT',description:'PLC → serwonapędy → wyspa EB80 → falowniki'},{id:'modbus',label:'Modbus RTU / RS-485',description:'PLC ↔ regulator temperatury'}],
  devices:[
   {id:'hmi',name:'Panel HMI',tag:'OBSŁUGA MASZYNY',kind:'hmi',network:'ethernet',x:40,y:35,w:230,h:140,description:'Ekrany operatorskie, nastawy i receptury. Panel odczytuje stan maszyny z PLC i przekazuje polecenia operatora.'},
