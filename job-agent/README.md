@@ -20,14 +20,14 @@ W szczegółach oferty można uzupełnić potwierdzone widełki brutto UoP i wsp
 
 | Portal | Odczyt ofert przez lokalny serwer | Aplikowanie i konto |
 | --- | --- | --- |
-| Pracuj.pl | Pierwsza strona wyszukiwania „automatyk, Warszawa”; w sprawdzeniu na żywo HTTP 403 | Wymaga przeglądarki i konta; brak automatycznego adaptera wysyłki |
-| RocketJobs | Kategoria automatyka, pierwsza strona, do 30 szczegółów | Wymaga formularza portalu; brak automatycznego adaptera wysyłki |
+| Pracuj.pl | Wyszukiwanie „automatyk, Warszawa”; w sprawdzeniu na żywo HTTP 403 | Wymaga przeglądarki i konta; brak automatycznego adaptera wysyłki |
+| RocketJobs | Kategoria automatyka, widoczne strony „Następna”, do 10 stron i 500 szczegółów | Wymaga formularza portalu; brak automatycznego adaptera wysyłki |
 | No Fluff Jobs | Kategoria automatyka, pierwsza strona, do 30 szczegółów | Wymaga formularza portalu; brak automatycznego adaptera wysyłki |
-| Aplikuj.pl | Pierwsza strona Warszawy, do 30 szczegółów; obejmuje także inne zawody | Wymaga formularza portalu; brak automatycznego adaptera wysyłki |
+| Aplikuj.pl | Wyszukiwanie automatyk w Warszawie, widoczne strony „Następna”, do 10 stron i 500 szczegółów; zawiera też reklamy innych zawodów | Wymaga formularza portalu; brak automatycznego adaptera wysyłki |
 | LinkedIn | Obsługa przez zalogowaną przeglądarkę, bez adaptera serwerowego | Wymaga aktywnej sesji; istniejącego profilu nie należy dublować |
 | Jooble | Brak adaptera; API agregatora wymaga osobnego klucza | Konto kandydata nie jest kluczem API; oferty mogą przekierowywać do innych portali |
 
-Adaptery odczytują odnośniki i dane strukturalne JobPosting dostępne w HTML. Nie wykonują kodu strony i nie obchodzą zabezpieczeń. Raportują rzeczywisty zakres odczytu oraz błędy szczegółów. Brak pełnego przeglądania paginacji i wszystkich ofert każdego portalu. Zmiana układu strony może wymagać aktualizacji adaptera. Nieukończony odczyt szczegółów nie jest liczony jako odnaleziona oferta. Kod HTTP 403 i wyzwania bezpieczeństwa wymagają obsługi w przeglądarce.
+Adaptery odczytują odnośniki i dane strukturalne JobPosting dostępne w HTML. Nie wykonują kodu strony i nie obchodzą zabezpieczeń. Raportują rzeczywisty zakres odczytu oraz błędy szczegółów. Paginacja podąża wyłącznie za odnośnikami z odwiedzonych stron, z wykrywaniem pętli. Nie zgaduje adresów kolejnych stron. Domyślne limity to 10 stron i 500 szczegółów na źródło; limit, błąd kolejnej strony lub przycisk dynamicznego doładowania oznaczają niepełny odczyt. No Fluff Jobs doładowuje kolejne oferty w przeglądarce, więc jego publiczny odczyt pozostaje ograniczony. Nie jest to pełne przeszukiwanie wszystkich ofert każdego portalu. Zmiana układu strony może wymagać aktualizacji adaptera. Nieukończony odczyt szczegółów nie jest liczony jako odnaleziona oferta. Limity można ustawić w definicji źródła jako maxPages (1–100) i maxDetails (1–5000); panel zachowuje ustawienia domyślne. Kod HTTP 403 i wyzwania bezpieczeństwa wymagają obsługi w przeglądarce.
 
 Sekcja kont przechowuje ręcznie potwierdzony stan i czas sprawdzenia. Zmiana statusu w panelu **nie zakłada konta i nie loguje** na portalu. Nowe hasło, akceptację regulaminu oraz potwierdzenie adresu wykonuje użytkownik w przygotowanej karcie portalu. Haseł nie należy przesyłać przez czat.
 
@@ -52,3 +52,7 @@ Automatyzacja domyślnie wyłączona. Po włączeniu obejmuje nowe kwalifikując
 Historia działań podaje czas w strefie Europe/Warsaw; zapis źródłowy używa UTC. Statystyki pokazują aktualny etap ofert, a historia przechowuje wszystkie zmiany. Nie jest to jeszcze kompletna automatyzacja aplikowania na sześciu portalach.
 
 Wysyłka wykonana przez asystenta w przeglądarce jest zapisywana osobno jako „Wysłana · przeglądarka”, z tekstem potwierdzenia portalu, adresem oferty, nazwą CV i czasem zarejestrowania potwierdzenia. Sam przycisk „Aplikuj” bez potwierdzenia nie wystarcza. Powtórne zapisanie tego samego potwierdzenia jest blokowane. Publiczne API nie jest używane do zgadywania sukcesu wysyłki z przeglądarki.
+
+Automatyczny odczyt widełek UoP uznaje tylko jednoznaczny zapis zakresu z etykietą „PLN Brutto miesięcznie – UoP”. Odróżnia go od osobnych kwot netto B2B i nie bierze widełek z sekcji podobnych ofert. Sprzeczne zakresy pozostają do weryfikacji. Samo salary w JobPosting nadal nie potwierdza brutto ani UoP.
+
+Dla RocketJobs odczytywane są też współrzędne z publicznych danych strony, wyłącznie gdy identyfikator oferty oraz miasto są zgodne z aktualnym ogłoszeniem i istnieje jedna jednoznaczna para współrzędnych. Współrzędne podobnych ofert są pomijane. Kod dekoduje JSON bez uruchamiania skryptów strony. Brak jednoznacznego wyniku nadal wymaga weryfikacji lokalizacji.

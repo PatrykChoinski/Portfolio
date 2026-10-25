@@ -13,7 +13,7 @@ export function normalize(raw,source){
  const url=new URL(raw.url);if(url.protocol!=='https:')throw Error('Oferta wymaga adresu HTTPS');
  url.hash='';for(const key of [...url.searchParams.keys()])if(/^(utm_|fbclid|gclid)/.test(key))url.searchParams.delete(key);
  const title=String(raw.title||'').slice(0,300);if(!title)throw Error('Brak stanowiska');
- return {id:createHash('sha256').update(url.href).digest('hex').slice(0,24),url:url.href,title,company:String(raw.company||'Nie podano'),description:String(raw.description||'').slice(0,50000),location:String(raw.location||''),latitude:raw.latitude,longitude:raw.longitude,salary:raw.salary||null,source,greenhouse:raw.greenhouse||null,validThrough:raw.validThrough||null,datePosted:raw.datePosted||null,seenAt:new Date().toISOString()};
+ return {id:createHash('sha256').update(url.href).digest('hex').slice(0,24),url:url.href,title,company:String(raw.company||'Nie podano'),description:String(raw.description||'').slice(0,50000),location:String(raw.location||''),latitude:raw.latitude,longitude:raw.longitude,locationEvidence:raw.locationEvidence||null,salary:raw.salary||null,source,greenhouse:raw.greenhouse||null,validThrough:raw.validThrough||null,datePosted:raw.datePosted||null,seenAt:new Date().toISOString()};
 }
 export function assess(job,config=defaults){
  const text=(job.title+' '+job.description).toLowerCase(),matched=terms.filter(t=>text.includes(t));
@@ -29,7 +29,7 @@ export function assess(job,config=defaults){
  return {eligible:reasons.length===0,matched,distanceKm:km,reasons};
 }
 export async function collect(source,fetcher=fetch){
- if(source.type==='portal')return collectPortal(source.portal,normalize,fetcher);
+ if(source.type==='portal')return collectPortal(source.portal,normalize,fetcher,source);
  if(source.type!=='greenhouse')throw Error('Nieobsługiwany typ źródła');
  if(!/^[a-z0-9-]+$/i.test(source.board))throw Error('Nieprawidłowy identyfikator tablicy');
  const res=await fetcher(`https://boards-api.greenhouse.io/v1/boards/${source.board}/jobs?content=true`,{signal:AbortSignal.timeout(20000)});

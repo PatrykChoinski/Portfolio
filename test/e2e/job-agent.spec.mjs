@@ -29,15 +29,22 @@ test('private dashboard imports, deduplicates and distinguishes preparation from
  await page.locator('[data-status]').selectOption('manual-sent');await expect(page.locator('.job .badge').first()).toHaveText('Wysłana · ręcznie');
  const token=await page.locator('[name="agent-token"]').getAttribute('content');
  const invalidReceipt=await page.request.post(url+'/api/browser-result',{headers:{'X-Agent-Token':token},data:{id:'missing',receipt:'',url:job.url}});expect(invalidReceipt.status()).toBe(400);
- const browserJob={...job,url:job.url+'-browser'};
+ const browserJob={...job,url:job.url+'-browser',latitude:undefined,longitude:undefined};
  await page.request.post(url+'/api/import',{headers:{'X-Agent-Token':token},data:{jobs:[browserJob]}});
  const imported=await(await page.request.get(url+'/api/state')).json(),browserId=imported.jobs.find(j=>j.url===browserJob.url).id;
  const verifiedSalary=await page.request.post(url+'/api/offer',{headers:{'X-Agent-Token':token},data:{id:browserId,fields:{salary:{min:17000,max:22000}},note:'TEST: osobno potwierdzone widełki brutto UoP'}});expect(verifiedSalary.status()).toBe(200);
+ await page.request.post(url+'/api/import',{headers:{'X-Agent-Token':token},data:{jobs:[{...browserJob,latitude:52.23,longitude:21.01}]}});
+ const enriched=await(await page.request.get(url+'/api/state')).json();expect(enriched.jobs.find(j=>j.id===browserId).latitude).toBe(52.23);
  const receipt={id:browserId,url:browserJob.url,receipt:'TEST: portal potwierdził wysłanie na serwerze testowym'};
  const recorded=await page.request.post(url+'/api/browser-result',{headers:{'X-Agent-Token':token},data:receipt});expect(recorded.status()).toBe(200);
  const duplicate=await page.request.post(url+'/api/browser-result',{headers:{'X-Agent-Token':token},data:receipt});expect(duplicate.status()).toBe(400);
  await page.reload();await expect(page.locator('#stats')).toContainText('Wysłane / dalszy etap2');
  const denied=await page.request.post(url+'/api/scan',{data:{}});expect(denied.status()).toBe(403);
  await page.locator('#search').fill('nieistniejące');await expect(page.locator('.job')).toHaveCount(0);
+ const bulk=Array.from({length:30},(_,i)=>({...job,title:`PLC dodatkowa ${i}`,url:`https://example.com/jobs/bulk/${i}`}));
+ await page.request.post(url+'/api/import',{headers:{'X-Agent-Token':token},data:{jobs:bulk}});
+ await page.reload();await expect(page.locator('.job')).toHaveCount(25);await expect(page.locator('#previous-page')).toBeDisabled();
+ await page.getByRole('button',{name:'Następna strona',exact:true}).click();await expect(page.locator('.job')).toHaveCount(7);await expect(page.locator('#next-page')).toBeDisabled();
+ await page.locator('#filter').selectOption('sent');await expect(page.locator('.job')).toHaveCount(2);await expect(page.locator('#pagination')).toContainText('strona 1 z 1');
  }finally{child.kill();await new Promise(resolve=>child.exitCode!==null?resolve():child.once('exit',resolve));await rm(directory,{recursive:true,force:true});}
 });
