@@ -122,3 +122,21 @@ export const portfolioScreenshots = [
 ];
 
 export const githubProfile={username:'PatrykChoinski',activityUrl:'https://github.com/PatrykChoinski?tab=overview',repositories:[{name:'Portfolio',title:'Portfolio'},{name:'Promasz-Visu3D',title:'Wizualizacja maszyny 3D'},{name:'Codesys-CI-CD',title:'Automatyczne testy PLC'}]};
+
+export const controlSystem = {
+ title:'Jeden system. Wiele elementów.',
+ description:'Przykładowa architektura sterowania maszyną: od panelu operatora, przez PLC, po ruch osi, pneumatykę i regulację temperatury.',
+ note:'Schemat poglądowy połączeń komunikacyjnych. Pokazuje role urządzeń, bez obwodów zasilania i bezpieczeństwa. Przyjęto wariant EB80 z interfejsem EtherCAT oraz napędy i regulator z odpowiednimi interfejsami.',
+ networks:[{id:'ethernet',label:'Ethernet',description:'Panel operatorski ↔ PLC'},{id:'ethercat',label:'EtherCAT',description:'PLC → serwonapędy → wyspa EB80'},{id:'modbus',label:'Modbus RTU / RS-485',description:'PLC ↔ falowniki i regulator'}],
+ devices:[
+  {id:'hmi',name:'Panel HMI',tag:'OBSŁUGA MASZYNY',kind:'hmi',network:'ethernet',x:40,y:35,w:230,h:140,description:'Ekrany operatorskie, nastawy i receptury. Panel odczytuje stan maszyny z PLC i przekazuje polecenia operatora.'},
+  {id:'plc',name:'Sterownik PLC',tag:'LOGIKA I KOORDYNACJA',kind:'plc',network:'all',x:400,y:35,w:260,h:140,description:'Realizuje sekwencje pracy maszyny, koordynuje ruch osi i wymianę danych. Łączy obsługę HMI z napędami, pneumatyką i regulacją procesu.'},
+  {id:'temperature',name:'Regulator temperatury',tag:'PROCES CIEPLNY',kind:'temperature',network:'modbus',x:850,y:35,w:230,h:140,description:'Lokalna regulacja PID lub dwustanowa z histerezą. PLC wymienia z regulatorem nastawę, wartość mierzoną i informacje o stanie przez Modbus RTU.'},
+  {id:'servo-x',name:'Serwonapęd X',tag:'OŚ X',kind:'servo',network:'ethercat',x:35,y:330,w:140,h:165,description:'Sterowanie osią X: bazowanie, pozycjonowanie i odczyt sprzężenia zwrotnego. Polecenia ruchu i status osi są wymieniane ze sterownikiem przez EtherCAT.'},
+  {id:'servo-y',name:'Serwonapęd Y',tag:'OŚ Y',kind:'servo',network:'ethercat',x:205,y:330,w:140,h:165,description:'Sterowanie osią Y i współpraca z pozostałymi osiami. PLC koordynuje ruch, a serwonapęd realizuje zadane parametry osi.'},
+  {id:'servo-z',name:'Serwonapęd Z',tag:'OŚ Z',kind:'servo',network:'ethercat',x:375,y:330,w:140,h:165,description:'Sterowanie osią Z z diagnostyką stanu i obsługą trybu ręcznego oraz automatycznego. Komunikacja ze sterownikiem przez EtherCAT.'},
+  {id:'eb80',name:'Wyspa EB80',tag:'PNEUMATYKA',kind:'valves',network:'ethercat',x:575,y:330,w:180,h:165,description:'Wyspa zaworowa steruje elementami pneumatycznymi maszyny. W pokazanym wariancie EtherCAT PLC przekazuje stany wyjść zaworów i odczytuje diagnostykę wyspy.',source:'https://ecommerce.metalwork.it/store/mw/en/Catalogue/Valves/Valve-islands-and-Fieldbus/EB-80-Electro-pneumatic-system/EB-80-Electrical-connection---E/EB-80-Electrical-connection---E/EB-80-connection-EtherCAT/p/02282E0EC'},
+  {id:'inverter-1',name:'Falownik 1',tag:'SILNIK 1',kind:'inverter',network:'modbus',x:800,y:330,w:130,h:165,description:'Sterowanie prędkością silnika. PLC przekazuje polecenie pracy i zadaną częstotliwość, a odczytuje status oraz informacje diagnostyczne.'},
+  {id:'inverter-2',name:'Falownik 2',tag:'SILNIK 2',kind:'inverter',network:'modbus',x:960,y:330,w:130,h:165,description:'Niezależny napęd drugiego silnika. Wspólna magistrala Modbus RTU umożliwia wymianę danych z PLC przy użyciu odrębnego adresu urządzenia.'}
+ ]
+};

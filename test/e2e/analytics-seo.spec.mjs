@@ -5,7 +5,7 @@ test('clean layout, full portrait and sticky navigation on desktop and mobile',a
  for(const width of [1280,390]){
   await page.setViewportSize({width,height:900});await page.goto('/');
   await expect(page.locator('.ticker,.photo-source,.technology-logo[href],.protocol-logos a')).toHaveCount(0);
-  const order=await page.locator('main>section[id]').evaluateAll(nodes=>nodes.map(n=>n.id));expect(order.indexOf('automatyka')+1).toBe(order.indexOf('kompetencje'));
+  const order=await page.locator('main>section[id]').evaluateAll(nodes=>nodes.map(n=>n.id));expect(order.slice(order.indexOf('automatyka'),order.indexOf('kompetencje')+1)).toEqual(['automatyka','system-sterowania','kompetencje']);
   await expect(page.locator('.portrait-hero .machine-top')).toHaveCount(0);
   const geometry=await page.locator('.hero-portrait').evaluate(img=>{const r=img.getBoundingClientRect(),caption=document.querySelector('.portrait-caption').getBoundingClientRect();return {width:r.width,height:r.height,fit:getComputedStyle(img).objectFit,caption:caption.top,bottom:r.bottom};});
   expect(geometry.fit).toBe('contain');expect(Math.abs(geometry.width-geometry.height)).toBeLessThan(1);expect(geometry.caption).toBeGreaterThanOrEqual(geometry.bottom-1);

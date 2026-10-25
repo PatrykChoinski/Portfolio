@@ -1,4 +1,5 @@
 import {initGithubActivity} from './github-activity.mjs';
+import {initControlSystem} from './control-system.mjs';
 import {initVideoExcerpt} from './video-excerpt.mjs';
 import {initMachinePreviews} from './machine-previews.mjs';
 import {initAnalytics} from './analytics.mjs';
@@ -52,6 +53,7 @@ if(!document.querySelector('.gallery-note')) document.querySelector('#projects')
 
 if(!document.querySelector('.equipment-strip')) document.querySelector('#automatyka').insertAdjacentHTML('beforeend',`<div class="equipment-strip" aria-label="Przykłady urządzeń automatyki">${equipment.map(e=>`<figure><img src="${e.src}" alt="${e.name}" loading="lazy"><figcaption>${e.name}</figcaption></figure>`).join('')}</div><div class="protocol-header"><p class="eyebrow">KOMUNIKACJA PRZEMYSŁOWA</p></div><div class="protocol-logos">${protocols.map(p=>`<div title="${p.use}"><img src="${p.src}" alt="${p.name}" loading="lazy">${p.variant?`<span>${p.variant}</span>`:' '}</div>`).join('')}</div>`);
 
+initControlSystem();
 await initGithubActivity();
 document.querySelectorAll('a[href="https://github.com/PatrykChoinski"]').forEach(link=>link.classList.add('github-cta'));
 initAnalytics();
