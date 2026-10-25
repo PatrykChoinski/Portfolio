@@ -22,7 +22,7 @@ W szczegółach oferty można uzupełnić potwierdzone widełki brutto UoP i wsp
 | --- | --- | --- |
 | Pracuj.pl | Wyszukiwanie „automatyk, Warszawa”; w sprawdzeniu na żywo HTTP 403 | Wymaga przeglądarki i konta; brak automatycznego adaptera wysyłki |
 | RocketJobs | Kategoria automatyka, widoczne strony „Następna”, do 10 stron i 500 szczegółów | Lokalna wysyłka rozpoznanym formularzem bez konta; dodatkowe wymagania zatrzymują wysyłkę |
-| No Fluff Jobs | Kategoria automatyka, pierwsza strona, do 30 szczegółów | Wymaga formularza portalu; brak automatycznego adaptera wysyłki |
+| No Fluff Jobs | Kategoria automatyka, pierwsza strona; jawne widełki brutto UoP, współrzędne i wymagania bieżącej oferty | Wymaga formularza portalu; brak automatycznego adaptera wysyłki |
 | Aplikuj.pl | Wyszukiwanie automatyk w Warszawie, widoczne strony „Następna”, do 10 stron i 500 szczegółów; zawiera też reklamy innych zawodów | Wymaga formularza portalu; brak automatycznego adaptera wysyłki |
 | LinkedIn | Obsługa przez zalogowaną przeglądarkę, bez adaptera serwerowego | Wymaga aktywnej sesji; istniejącego profilu nie należy dublować |
 | Jooble | Brak adaptera; API agregatora wymaga osobnego klucza | Konto kandydata nie jest kluczem API; oferty mogą przekierowywać do innych portali |
@@ -66,3 +66,5 @@ Przed wysyłką ponownie sprawdza stronę oferty: zgodność pracodawcy i stanow
 Zamiar wysłania jest zapisywany przed kliknięciem, aby przerwanie procesu nie spowodowało ponowienia. Sukces wymaga komunikatu o wysłaniu do tego samego pracodawcy. Brak potwierdzenia daje status niepewny i blokuje automatyczne ponowienie. Rejestrowane są nazwa CV, jego SHA-256 oraz — jeśli zapis jest możliwy — zrzut ekranu w prywatnym katalogu evidence obok state.json.
 
 Mechanizm przetestowano na lokalnych formularzach: poprawna wysyłka, wyłączone opcjonalne zgody, wymagany regulamin, dodatkowe pytania i brak potwierdzenia. Nie wykonano nim nowej rzeczywistej wysyłki; wcześniejsza aplikacja w historii została wysłana przez asystenta w przeglądarce. Nie oznacza to jeszcze zweryfikowanej produkcyjnie automatyzacji wszystkich sześciu portali.
+
+No Fluff Jobs: odczyt lokalizacji i wymagań z publicznego JSON serverApp-state wymaga zgodności identyfikatora bieżącej oferty. Dane polecanych ofert nie są używane do ustalania lokalizacji. Widełki są potwierdzane wyłącznie jawnym oznaczeniem brutto miesięcznie (UoP) w treści strony.

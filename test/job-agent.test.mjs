@@ -80,3 +80,16 @@ test('expired jobs and stale manual verifications never qualify automatically',(
  assert.equal(assess(normalize({...raw,title:'Motion Designer',description:'Marketing, motion design'},'test')).eligible,false);
  assert.equal(assess(normalize({...raw,title:'Specjalista automatyzacji',description:'Automatyzacja procesów finansowych'},'test')).eligible,false);
 });
+test('No Fluff salary and coordinates exclude recommendations and mismatched locations',()=>{
+ const url='https://nofluffjobs.com/pl/job/plc-engineer';
+ const posting={postingUrl:'plc-engineer',location:{places:[{url:'plc-engineer',city:'Warszawa',geoLocation:{latitude:52.23,longitude:21.01}}]}};
+ const page=value=>'<script id="serverApp-state" type="application/json">'+JSON.stringify(value)+'</script>';
+ const state={'/posting/plc-engineer?region=pl':posting,'/similar':{latitude:51,longitude:19}};
+ assert.equal(pageCoordinates(page(state),url,'Warszawa').latitude,52.23);
+ assert.equal(pageCoordinates(page(state),url,'Gdańsk'),null);
+ assert.equal(pageCoordinates(page({'/posting/other?region=pl':posting}),url,'Warszawa'),null);
+ posting.location.places.push({...posting.location.places[0],geoLocation:{latitude:53,longitude:21}});
+ assert.equal(pageCoordinates(page(state),url,'Warszawa'),null);
+ assert.equal(grossEmploymentSalary('18 000 – 22 000 PLN brutto miesięcznie (UoP)').min,18000);
+ assert.equal(grossEmploymentSalary('18 000 – 22 000 PLN netto miesięcznie (B2B)'),null);
+});

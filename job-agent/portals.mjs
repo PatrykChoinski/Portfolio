@@ -35,7 +35,7 @@ export function nextPage(html,current,portal){
 export function grossEmploymentSalary(html){
  const text=cleanText(html).split(/podobne oferty|similar jobs|polecane oferty/i)[0],matches=new Map();
  // Only an explicit range followed by gross/month/UoP labels proves these conditions.
- const pattern=/([0-9][0-9\s\u00a0\u202f]*(?:[.,][0-9]{1,2})?)\s*[-–]\s*([0-9][0-9\s\u00a0\u202f]*(?:[.,][0-9]{1,2})?)\s*(?:PLN|zł)\s+Brutto\s+miesięcznie\s*[-–]\s*UoP\b/gi;
+ const pattern=/([0-9][0-9\s\u00a0\u202f]*(?:[.,][0-9]{1,2})?)\s*[-–]\s*([0-9][0-9\s\u00a0\u202f]*(?:[.,][0-9]{1,2})?)\s*(?:PLN|zł)\s+Brutto\s+miesięcznie\s*(?:[-–]\s*UoP\b|\(\s*UoP\s*\))/gi;
  for(const match of text.matchAll(pattern)){
   const number=s=>Number(s.replace(/[\s\u00a0\u202f]/g,'').replace(',','.')),min=number(match[1]),max=number(match[2]);
   if(min>0&&max>=min)matches.set(`${min}:${max}`,{min,max,currency:'PLN',period:'month',basis:'gross',contract:'employment',evidence:match[0]});
@@ -43,6 +43,15 @@ export function grossEmploymentSalary(html){
  return matches.size===1?[...matches.values()][0]:null;
 }
 export function pageCoordinates(html,url,city){
+ if(portalFor(url)?.id==='nofluffjobs'){
+  const posting=noFluffPosting(html,url),candidates=new Map();
+  for(const place of posting?.location?.places||[]){
+   const geo=place.geoLocation;
+   if(place.url!==posting.postingUrl||place.city!==city||!Number.isFinite(geo?.latitude)||!Number.isFinite(geo?.longitude)||Math.abs(geo.latitude)>90||Math.abs(geo.longitude)>180)continue;
+   candidates.set(`${geo.latitude}:${geo.longitude}`,{latitude:geo.latitude,longitude:geo.longitude,evidence:`Współrzędne podane przez No Fluff Jobs dla oferty ${posting.postingUrl}, ${city}`,sourceUrl:url});
+  }
+  return candidates.size===1?[...candidates.values()][0]:null;
+ }
  if(portalFor(url)?.id!=='rocketjobs'||!city)return null;
  const slug=decodeURIComponent(new URL(url).pathname.split('/').at(-1)),chunks=[];
  // Decode public Next.js JSON data without executing page JavaScript or resolving references.
@@ -72,6 +81,18 @@ export function pageCoordinates(html,url,city){
  }
  return candidates.size===1?[...candidates.values()][0]:null;
 }
+export function noFluffPosting(html,url){
+ if(portalFor(url)?.id!=='nofluffjobs')return null;
+ const slug=decodeURIComponent(new URL(url).pathname.split('/').at(-1));
+ for(const script of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)){
+  if(!/\bid\s*=\s*["']serverApp-state["']/i.test(script[1])||!/application\/json/i.test(script[1]))continue;
+  try{
+   const state=JSON.parse(script[2]),matches=Object.entries(state).filter(([key,value])=>key.startsWith(`/posting/${slug}?`)&&value?.postingUrl===slug);
+   if(matches.length===1)return matches[0][1];
+  }catch{}
+ }
+ return null;
+}
 export function fromPosting(posting,url){
  const locations=[posting.jobLocation].flat().filter(Boolean),location=locations[0];
  const value=posting.baseSalary?.value,coordinate=x=>x===undefined||x===null||x===''?undefined:Number(x);
@@ -97,7 +118,7 @@ export async function collectPortal(id,normalize,fetcher=fetch,limits={}){
  // Sequential requests, explicit limits, no guessed pagination URLs.
  for(const url of selected){
   if(jobs.some(j=>j.url===url))continue;
-  try{const detail=await htmlAt(url,fetcher),postings=jobPostings(detail);if(!postings.length){failures.push({url,error:'Brak danych JobPosting'});continue;}const raw=fromPosting(postings[0],url),salary=grossEmploymentSalary(detail),coordinates=pageCoordinates(detail,url,raw.location);if(salary)raw.salary=salary;if(coordinates){raw.latitude=coordinates.latitude;raw.longitude=coordinates.longitude;raw.locationEvidence=coordinates;}jobs.push(normalize(raw,portal.name));detailsRead++;}catch(e){failures.push({url,error:e.message});}
+  try{const detail=await htmlAt(url,fetcher),postings=jobPostings(detail);if(!postings.length){failures.push({url,error:'Brak danych JobPosting'});continue;}const raw=fromPosting(postings[0],url),salary=grossEmploymentSalary(detail),coordinates=pageCoordinates(detail,url,raw.location);const nfj=noFluffPosting(detail,url);if(nfj&&nfj.title?.trim()===raw.title?.trim()&&nfj.company?.name===raw.company){raw.description=cleanText([raw.description,nfj.requirements?.description,...(nfj.requirements?.musts||[]).map(item=>item.value)].filter(Boolean).join(' '));}if(salary)raw.salary=salary;if(coordinates){raw.latitude=coordinates.latitude;raw.longitude=coordinates.longitude;raw.locationEvidence=coordinates;}jobs.push(normalize(raw,portal.name));detailsRead++;}catch(e){failures.push({url,error:e.message});}
  }
  if(!links.size&&!jobs.length)throw Error('Nie znaleziono rozpoznawalnych ofert — układ portalu wymaga aktualizacji adaptera');
  const truncated=!listingsComplete||links.size>maxDetails;
