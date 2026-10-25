@@ -7,6 +7,7 @@
     "node": ">=22"
   },
   "scripts": {
+    "jobs": "node job-agent/server.mjs",
     "dev": "node scripts/serve.mjs dist",
     "build": "node scripts/build.mjs",
     "test": "node --test test/*.test.mjs",
