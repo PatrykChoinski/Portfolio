@@ -71,7 +71,7 @@ Hasła nigdy nie są umieszczane w repozytorium ani w logach.
 Uploader nadpisuje pliki z `dist/`, stronę główną wysyła na końcu i nie usuwa
 pozostałych plików hostingu (np. certyfikatów w `.well-known`).
 Brak sekretów powoduje błąd zadania Hostido; po ich uzupełnieniu ponów to zadanie.
-Po transferze workflow sprawdza stronę główną i angielskie CV po HTTPS.
+Po transferze workflow sprawdza typ MIME JavaScript oraz w Chromium: filtry, szczegóły projektów, schemat sterowania, SCADA, osadzenie symulatora i filmu oraz oba CV. Konfiguracja `hosting/.htaccess` trafia do katalogu głównego strony na Hostido.
 Dotychczasowy adres GitHub Pages pozostaje adresem kanonicznym; domena `.eu`
 jest drugim miejscem publikacji. Analytics działa na obu adresach po zgodzie.
 

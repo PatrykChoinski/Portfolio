@@ -9,6 +9,7 @@ import {chromium} from '@playwright/test';
 import {browserChannel} from './browser.mjs';
 await mkdir('dist', {recursive:true});
 await cp('index.html','dist/index.html');
+await cp('hosting/.htaccess','dist/.htaccess');
 await cp('src','dist/src',{recursive:true});
 await cp('public','dist/public',{recursive:true});
 await refreshGithubActivity();
@@ -21,6 +22,8 @@ for(const match of [...html.matchAll(/href="(\.\/src\/[^"?]+\.css)"/g)]){
  const revision=createHash('sha256').update(await readFile(match[1])).digest('hex').slice(0,12);
  html=html.replaceAll(`href="${match[1]}"`,`href="${match[1]}?v=${revision}"`);
 }
+const moduleRevision=createHash('sha256').update(await readFile('src/app.mjs')).digest('hex').slice(0,12);
+html=html.replace('src="./src/app.mjs"',`src="./src/app.mjs?v=${moduleRevision}"`);
 await writeFile('dist/index.html',html.replace('</head>',seoHead()+'</head>'));
 await writeFile('dist/prywatnosc.html',privacyPage());
 await writeFile('dist/statystyki.html',reportsPage());
