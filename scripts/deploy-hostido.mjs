@@ -40,5 +40,5 @@ export async function deployHostido({directory='dist',env=process.env,client=new
  }finally{client.close();}
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(resolve(process.argv[1])).href){
- deployHostido().catch(error=>{const code=String(error?.code||'UNKNOWN');console.error(`Hostido error code: ${/^(?:[0-9]{3}|[A-Z_]{2,60})$/.test(code)?code:'UNKNOWN'}`);console.error('Hostido deployment failed. Check Actions secrets, the FTP account directory, TLS certificate and connection. Credentials are not logged.');process.exitCode=1;});
+ deployHostido().catch(error=>{const code=String(error?.code||'UNKNOWN');console.error(`Hostido error code: ${/^(?:[0-9]{3}|[A-Z_]{2,60})$/.test(code)?code:'UNKNOWN'}`);if(error?.code===425){let detail=String(error.message);for(const value of [process.env.HOSTIDO_FTP_USERNAME,process.env.HOSTIDO_FTP_PASSWORD])if(value)detail=detail.split(value).join('[redacted]');console.error('FTPS data channel: '+detail.replace(/[\r\n]/g,' ').slice(0,300));}console.error('Hostido deployment failed. Check Actions secrets, the FTP account directory, TLS certificate and connection. Credentials are not logged.');process.exitCode=1;});
 }
