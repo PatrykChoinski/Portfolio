@@ -82,3 +82,24 @@ Uploader sprawdza ich podpisy względem wbudowanego magazynu zaufania Node.js
 oraz okres ważności, a następnie używa ich do uzupełnienia łańcucha TLS.
 Weryfikacja nazwy serwera i certyfikatu pozostaje włączona. Przy zmianie
 łańcucha po stronie Hostido odśwież ten plik z oficjalnych źródeł Let's Encrypt.
+
+## Samodzielny symulator offline
+
+Demo 3D jest zapisane w `public/apps/simulator/`, więc działa także wtedy,
+gdy prywatne repozytorium aplikacji nie udostępnia GitHub Pages.
+Właściciel zatwierdził publikację wersji offline 29.10.2026.
+Eksport bazuje na wersji aplikacji `8fbf0a2939538c643c2a4be418b13196bc6302c3`.
+Publikowane są wyłącznie zbudowany klient, grafiki i wybrana konfiguracja demonstracyjna:
+`static: true`, `plc: false`. Nie kopiuje się serwera OPC UA, konfiguracji
+połączenia, kont, haseł, oryginalnych plików CNC ani map źródłowych.
+
+Odświeżenie demonstracji z lokalnego, prywatnego źródła:
+
+```powershell
+npm install --prefix .local/simulator-tools --no-save esbuild@0.28.2 three@0.186.1
+node scripts/build-offline-simulator.mjs SCIEZKA_DO_PRYWATNEGO_ZRODLA .local/simulator-tools
+npm run build
+```
+
+Prywatnych źródeł nie dodawaj do repozytorium portfolio. Test symulatora
+sprawdza widok 3D i rzeczywiste wykonanie symulowanego cięcia bez żądań do API PLC.

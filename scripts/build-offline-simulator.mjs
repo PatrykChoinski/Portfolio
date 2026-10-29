@@ -1,0 +1,14 @@
+import {pathToFileURL} from 'node:url';
+import {readFile,writeFile,cp,mkdir} from 'node:fs/promises';
+import {resolve} from 'node:path';
+if(!process.argv[2]||!process.argv[3])throw new Error('Usage: node scripts/build-offline-simulator.mjs PRIVATE_SOURCE_DIRECTORY BUILD_TOOLS_DIRECTORY');
+const source=resolve(process.argv[2]),tools=resolve(process.argv[3]),out=resolve('public/apps/simulator');
+const {build}=await import(pathToFileURL(resolve(tools,'node_modules/esbuild/lib/main.js')));
+const {DEFAULTS,CUT_STEPS}=await import(pathToFileURL(resolve(source,'src/shared/config.js')));
+await mkdir(out,{recursive:true});
+await build({entryPoints:[source+'/src/client/main.js'],outfile:out+'/app.js',bundle:true,format:'iife',target:'es2020',minify:true,sourcemap:false,legalComments:'none',nodePaths:[resolve(tools,'node_modules')],plugins:[{name:'offline-demo',setup(builder){builder.onLoad({filter:/\.js$/},async args=>{if(args.path.includes('node_modules'))return;let contents=await readFile(args.path,'utf8');contents=contents.replaceAll('api/config','config.json').replaceAll('192.168.1.10','localhost').replaceAll('Offline - symulacja (GitHub Pages, bez PLC)','Demo offline - symulacja bez PLC').replaceAll('Wersja statyczna (GitHub Pages)','Demo offline');return {contents,loader:'js'};});}}]});
+let html=await readFile(source+'/src/client/index.html','utf8');html=html.replace(/(<div class="brand") title="[^"]*"/,'$1 title="Symulator maszyny 3D"').replaceAll('192.168.1.10','localhost').replace('<title>VizuApp</title>','<title>Symulator maszyny 3D — demo offline</title>').replace('</head>','<meta name="robots" content="noindex"><style>#cncExample,#loginBtn,#authUser{display:none!important}.brand:after{content:"DEMO OFFLINE";font:10px Arial;color:#b9ee6d;margin-left:8px}</style></head>');await writeFile(out+'/index.html',html);
+await cp(source+'/src/client/style.css',out+'/style.css');await cp(source+'/src/client/img',out+'/img',{recursive:true});
+const keys=['autoClearOnStart','materialMargin','materialMinSize','frame','offline','tableThickness','laser','saw'];const config=Object.fromEntries(keys.map(key=>[key,DEFAULTS[key]]));Object.assign(config,{plc:false,static:true,variables:{},cutSteps:CUT_STEPS,auth:{enabled:false,demo:true,users:[],timeoutMin:0}});await writeFile(out+'/config.json',JSON.stringify(config,null,2));
+await cp('.local/simulator-tools/node_modules/three/LICENSE',out+'/THIRD-PARTY-LICENSE.txt');
+console.log('Offline-only simulator built without server code, endpoints, credentials or original CNC files.');

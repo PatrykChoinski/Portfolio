@@ -57,8 +57,6 @@ jobs:
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     needs: test
     runs-on: ubuntu-latest
-    container:
-      image: mcr.microsoft.com/playwright:v1.64.1-noble
     timeout-minutes: 15
     environment:
       name: hostido
@@ -79,5 +77,20 @@ jobs:
           HOSTIDO_FTP_USERNAME: ${{ secrets.HOSTIDO_FTP_USERNAME }}
           HOSTIDO_FTP_PASSWORD: ${{ secrets.HOSTIDO_FTP_PASSWORD }}
         run: node scripts/deploy-hostido.mjs
-      - name: Verify published application in Chromium
-        run: node scripts/verify-deployment.mjs https://patrykchoinski.eu/
+      - name: Verify JavaScript MIME type
+        run: node scripts/verify-deployment.mjs https://patrykchoinski.eu/ --mime-only
+  verify-hostido:
+    name: Verify patrykchoinski.eu interactions
+    needs: deploy-hostido
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.64.1-noble
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: node scripts/verify-deployment.mjs https://patrykchoinski.eu/

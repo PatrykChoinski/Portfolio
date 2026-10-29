@@ -1,0 +1,183 @@
+{
+  "autoClearOnStart": true,
+  "materialMargin": 300,
+  "materialMinSize": [
+    1200,
+    800
+  ],
+  "frame": {
+    "show": true,
+    "bridgeAlong": "x",
+    "margin": 300,
+    "bridgeZ": 300,
+    "ramLength": 1400,
+    "tableHeight": 700,
+    "panel": true
+  },
+  "offline": {
+    "machine": {
+      "discDiameter": 625,
+      "bladeWidth": 4,
+      "cutTiltDiameter": 200,
+      "headRotationDiameter": 100,
+      "materialHeight": 450,
+      "materialThickness": 40,
+      "millWidth": 50,
+      "millTiltDiameter": 100,
+      "millLength": 250,
+      "drillLength": 250,
+      "millCorrection": 0,
+      "polishDiameter": 120,
+      "polishHeight": -60
+    },
+    "mode": "saw",
+    "speedMax": {
+      "fast": 20,
+      "saw": 10,
+      "mill": 2,
+      "zUp": 3,
+      "zWork": 3,
+      "mainDrive": 200
+    },
+    "board": {
+      "count": 4,
+      "points": [
+        [
+          0,
+          0,
+          490
+        ],
+        [
+          3500,
+          0,
+          490
+        ],
+        [
+          3500,
+          3000,
+          490
+        ],
+        [
+          0,
+          3000,
+          490
+        ]
+      ]
+    },
+    "rock": {
+      "count": 4,
+      "points": [
+        [
+          300,
+          200,
+          450
+        ],
+        [
+          2800,
+          200,
+          450
+        ],
+        [
+          2800,
+          1800,
+          450
+        ],
+        [
+          300,
+          1800,
+          450
+        ]
+      ]
+    },
+    "dynamics": {
+      "cutVel": 1.8,
+      "cutAcc": 0.06,
+      "cutDec": 0.06,
+      "fastVel": 9,
+      "fastAcc": 0.3,
+      "zVel": 1.2,
+      "zAcc": 0.04,
+      "zUpVel": 1.2,
+      "aVel": 30,
+      "aAcc": 60,
+      "bVel": 10,
+      "bAcc": 20,
+      "jogXVel": 6,
+      "jogYVel": 6,
+      "jogZVel": 1.2,
+      "jogAVel": 20,
+      "jogBVel": 10
+    },
+    "saw": {
+      "freq": 50,
+      "dir": "FWD"
+    },
+    "cut": {
+      "x0": 200,
+      "y0": 300,
+      "x1": 1000,
+      "y1": 300,
+      "b": 0,
+      "depth": 30,
+      "passes": 3,
+      "above": 20
+    },
+    "start": {
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "a": 0,
+      "b": 0
+    }
+  },
+  "tableThickness": 80,
+  "laser": {
+    "side": 1,
+    "length": 2500,
+    "mountAngle": 40
+  },
+  "saw": {
+    "freqScale": 0.01,
+    "visualRps": 1.5,
+    "toolVisualRps": 3,
+    "fwdSign": -1
+  },
+  "plc": false,
+  "static": true,
+  "variables": {},
+  "cutSteps": {
+    "0": "WaitForStart",
+    "1": "ResetInputs",
+    "2": "CheckPopup",
+    "3": "PrepareToStart",
+    "10": "MoveToStartPosition",
+    "11": "DoneMoveToStartPosition",
+    "12": "MoveToBasePosition",
+    "13": "DoneMoveToBasePosition",
+    "20": "StartCutDepth",
+    "21": "DoneCutDepth",
+    "22": "CutDepthPrepare",
+    "30": "StartManualPass",
+    "31": "DoneManualPass",
+    "50": "StartSingleCut",
+    "51": "WaitForSetVelocity",
+    "52": "DoneSetVelocity",
+    "56": "StartCutOvertaking",
+    "59": "SingleCutDone",
+    "60": "StartLastCut",
+    "61": "DoneLastCut",
+    "70": "StartMoveAboveMaterial",
+    "71": "DoneMoveAboveMaterial",
+    "80": "CutStop",
+    "81": "CutStopReset",
+    "90": "CutPause",
+    "91": "CutResume",
+    "100": "CutFinish"
+  },
+  "auth": {
+    "enabled": false,
+    "demo": true,
+    "users": [],
+    "timeoutMin": 0
+  }
+}

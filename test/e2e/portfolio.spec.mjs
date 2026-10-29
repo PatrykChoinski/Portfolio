@@ -37,11 +37,11 @@ test('SCADA signals, batch comparison and time cursor respond; 3D demo offers vi
  const video=page.locator('.demo-video');
  await video.scrollIntoViewIfNeeded();
  await expect(video.getByRole('button',{name:'Odtwórz film',exact:true})).toBeVisible();
- await page.route('https://patrykchoinski.github.io/Promasz-Visu3D/',route=>route.fulfill({contentType:'text/html',body:'<h1>Simulator</h1>'}));
  await expect(page.locator('.demo-links a')).toHaveCSS('background-color','rgb(194, 249, 112)');
  await expect(page.getByRole('button',{name:'Uruchom pełny symulator tutaj ↗'})).toHaveCSS('background-color','rgb(194, 249, 112)');
  await page.getByRole('button',{name:'Uruchom pełny symulator tutaj ↗'}).click();
- await expect(page.locator('.simulator-frame')).toHaveAttribute('src','https://patrykchoinski.github.io/Promasz-Visu3D/');
+ await expect(page.locator('.simulator-frame')).toHaveAttribute('src','./public/apps/simulator/');
+ await expect(page.frameLocator('.simulator-frame').locator('#view canvas')).toBeVisible({timeout:20000});
 });
 
 test('merged projects, IT databases and automation equipment remain in their intended sections',async({page})=>{await page.goto('/');await expect(page.locator('#maszyny')).toHaveCount(0);await expect(page.locator('#skills')).not.toContainText('SQL Server');await expect(page.locator('#skills')).not.toContainText('PostgreSQL');await expect(page.locator('#support-skills')).toContainText('SQL Server');await expect(page.locator('#support-skills')).toContainText('PostgreSQL');await expect(page.locator('#support-skills')).toContainText('Claude');await expect(page.locator('#support-skills')).toContainText('Codex');await expect(page.locator('body')).not.toContainText('Three.js');await expect(page.locator('#projects')).not.toContainText('4000');await expect(page.locator('.equipment-strip figure')).toHaveCount(6);await expect(page.locator('.protocol-logos img')).toHaveCount(6);await expect(page.locator('#projects')).not.toContainText('Energia pod kontrolą');await expect(page.locator('#projects')).not.toContainText('Maszyna w przeglądarce');await expect(page.getByRole('heading',{name:'Ekosystem sterowania.'})).toHaveCount(0);});
