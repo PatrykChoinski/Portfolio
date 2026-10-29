@@ -108,6 +108,7 @@ export const pipelineRuns = [{"number":21,"date":"2026-09-22T10:19:42Z","url":"h
 
 export const site = {
  url:'https://patrykchoinski.github.io/Portfolio/',
+ additionalUrls:['https://patrykchoinski.eu/'],
  title:'Patryk Choiński | Automatyka przemysłowa | PLC · HMI · Motion',
  description:'Patryk Choiński — portfolio automatyki przemysłowej: PLC, HMI, SCADA, sterowanie ruchem, serwonapędy i aplikacje maszynowe.',
  measurementId:'G-9LDN9QT3BG',

@@ -5,6 +5,8 @@ import {site} from '../src/data.mjs';
 import {seoHead,sitemap,privacyPage,reportsPage} from '../scripts/site-template.mjs';
 test('analytics accepts only configured production origin and portfolio path',()=>{
  assert.equal(measurementEnabled(site,new URL(site.url)),true);
+ assert.equal(measurementEnabled(site,new URL('https://patrykchoinski.eu/')),true);
+ assert.equal(measurementEnabled(site,new URL('https://patrykchoinski.eu.evil.example/')),false);
  for(const url of ['http://127.0.0.1:4173/','https://example.com/Portfolio/','https://patrykchoinski.github.io/Other/'])assert.equal(measurementEnabled(site,new URL(url)),false);
  assert.equal(measurementEnabled({...site,measurementId:''},new URL(site.url)),false);
 });

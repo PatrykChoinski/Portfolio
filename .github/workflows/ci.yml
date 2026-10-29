@@ -31,6 +31,13 @@ jobs:
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         with:
           path: dist
+      - uses: actions/upload-artifact@v4
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        with:
+          name: hostido-site
+          path: dist/
+          include-hidden-files: true
+          retention-days: 3
   deploy:
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     needs: test
@@ -45,3 +52,34 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+  deploy-hostido:
+    name: Deploy patrykchoinski.eu
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    needs: test
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment:
+      name: hostido
+      url: https://patrykchoinski.eu/
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - uses: actions/download-artifact@v4
+        with:
+          name: hostido-site
+          path: dist
+      - name: Publish built site over FTPS
+        env:
+          HOSTIDO_FTP_USERNAME: ${{ secrets.HOSTIDO_FTP_USERNAME }}
+          HOSTIDO_FTP_PASSWORD: ${{ secrets.HOSTIDO_FTP_PASSWORD }}
+        run: node scripts/deploy-hostido.mjs
+      - name: Verify published homepage and CV
+        run: |
+          curl --fail --retry 5 --retry-delay 5 https://patrykchoinski.eu/ -o /tmp/portfolio.html
+          grep -q 'system-sterowania' /tmp/portfolio.html
+          curl --fail --retry 5 --retry-delay 5 https://patrykchoinski.eu/public/cv/Patryk-Choinski-CV-EN.pdf -o /tmp/cv.pdf
+          head -c 4 /tmp/cv.pdf | grep -q '%PDF'

@@ -1,7 +1,7 @@
 import {site} from './data.mjs';
 
 export function measurementEnabled(config,location){
- try{return /^G-[A-Z0-9]+$/.test(config.measurementId)&&new URL(config.url).origin===location.origin&&location.pathname.startsWith(new URL(config.url).pathname);}catch{return false;}
+ try{return /^G-[A-Z0-9]+$/.test(config.measurementId)&&[config.url,...(config.additionalUrls||[])].some(url=>{const target=new URL(url);return target.origin===location.origin&&location.pathname.startsWith(target.pathname);});}catch{return false;}
 }
 export function safeCampaign(search){
  const params=new URLSearchParams(search),result={};

@@ -50,3 +50,27 @@ Pierwszy push i uruchomienie publikacji wykonano na polecenie właściciela 23.1
 ## Statystyki i SEO
 
 Integracja GA4 z wyborem odwiedzającego, zdarzenia CV/kontaktu/projektów, Web Vitals, metadane wyszukiwarki, mapa witryny i HTML czytelny bez JavaScript. Panel właściciela: /statystyki.html. Instrukcja podłączenia i zakres danych: docs/statystyki-seo.md. Lokalny podgląd nie jest zliczany. Przed pierwszym uruchomieniem zbuduj projekt.
+
+## Równoległa publikacja na Hostido
+
+Po udanym buildzie i testach workflow uruchamia niezależnie dwa zadania:
+GitHub Pages oraz `deploy-hostido` dla https://patrykchoinski.eu/. Oba używają
+tej samej wersji `dist/`; błąd jednego hostingu nie blokuje drugiego.
+Pull requesty nie otrzymują danych FTP i niczego nie publikują.
+
+W DirectAdmin przygotuj konto FTP typu „Niestandardowy”, ograniczone do
+`/domains/patrykchoinski.eu/public_html/`. Względem tego konta witryna trafia
+do `/`. Nie używaj konta mającego dostęp do całego hostingu.
+W ustawieniach repozytorium → Secrets and variables → Actions dodaj:
+
+- `HOSTIDO_FTP_USERNAME`: pełny login konta FTP.
+- `HOSTIDO_FTP_PASSWORD`: hasło tego konta.
+
+Serwer `host150631.hostido.net.pl`, port 21, jawny TLS/FTPS z weryfikacją certyfikatu.
+Hasła nigdy nie są umieszczane w repozytorium ani w logach.
+Uploader nadpisuje pliki z `dist/`, stronę główną wysyła na końcu i nie usuwa
+pozostałych plików hostingu (np. certyfikatów w `.well-known`).
+Brak sekretów powoduje błąd zadania Hostido; po ich uzupełnieniu ponów to zadanie.
+Po transferze workflow sprawdza stronę główną i angielskie CV po HTTPS.
+Dotychczasowy adres GitHub Pages pozostaje adresem kanonicznym; domena `.eu`
+jest drugim miejscem publikacji. Analytics działa na obu adresach po zgodzie.
