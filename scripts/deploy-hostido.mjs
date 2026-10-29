@@ -39,6 +39,14 @@ export async function deployHostido({directory='dist',env=process.env,client=new
   console.log(`Uploaded ${uploads.length} files to patrykchoinski.eu over FTPS.`);
  }finally{client.close();}
 }
+export async function publishWithRetries(operation,pause=ms=>new Promise(resolve=>setTimeout(resolve,ms))){
+ for(let attempt=1;attempt<=3;attempt++){
+  try{return await operation();}catch(error){
+   if(error?.code!==425||attempt===3)throw error;
+   console.warn('Retrying temporary FTPS data-channel error (425).');await pause(attempt*3000);
+  }
+ }
+}
 if(process.argv[1]&&import.meta.url===pathToFileURL(resolve(process.argv[1])).href){
- deployHostido().catch(error=>{const code=String(error?.code||'UNKNOWN');console.error(`Hostido error code: ${/^(?:[0-9]{3}|[A-Z_]{2,60})$/.test(code)?code:'UNKNOWN'}`);if(error?.code===425){let detail=String(error.message);for(const value of [process.env.HOSTIDO_FTP_USERNAME,process.env.HOSTIDO_FTP_PASSWORD])if(value)detail=detail.split(value).join('[redacted]');console.error('FTPS data channel: '+detail.replace(/[\r\n]/g,' ').slice(0,300));}console.error('Hostido deployment failed. Check Actions secrets, the FTP account directory, TLS certificate and connection. Credentials are not logged.');process.exitCode=1;});
+ publishWithRetries(()=>deployHostido()).catch(error=>{const code=String(error?.code||'UNKNOWN');console.error(`Hostido error code: ${/^(?:[0-9]{3}|[A-Z_]{2,60})$/.test(code)?code:'UNKNOWN'}`);if(error?.code===425){let detail=String(error.message);for(const value of [process.env.HOSTIDO_FTP_USERNAME,process.env.HOSTIDO_FTP_PASSWORD])if(value)detail=detail.split(value).join('[redacted]');console.error('FTPS data channel: '+detail.replace(/[\r\n]/g,' ').slice(0,300));}console.error('Hostido deployment failed. Check Actions secrets, the FTP account directory, TLS certificate and connection. Credentials are not logged.');process.exitCode=1;});
 }

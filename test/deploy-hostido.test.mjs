@@ -22,3 +22,9 @@ test('Hostido uploads only the built artifact, preserves remote files and publis
   let closed=false;await assert.rejects(deployHostido({directory:root,env:{},client:{close:()=>closed=true}}),/Actions secrets/);assert.equal(closed,true);
  }finally{assert.ok(root.startsWith(resolve(tmpdir())+sep+'portfolio-hostido-'));await rm(root,{recursive:true,force:true});}
 });
+
+test('temporary FTPS data failures retry with fresh attempts but authentication failures stop',async()=>{
+ const {publishWithRetries}=await import('../scripts/deploy-hostido.mjs');let attempts=0;
+ assert.equal(await publishWithRetries(async()=>{attempts++;if(attempts<3)throw {code:425};return 'published';},async()=>{}),'published');assert.equal(attempts,3);
+ attempts=0;await assert.rejects(publishWithRetries(async()=>{attempts++;throw Object.assign(new Error('Login failed'),{code:530});},async()=>{}),{code:530});assert.equal(attempts,1);
+});
