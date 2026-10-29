@@ -1,11 +1,21 @@
+import {readFileSync} from 'node:fs';
+import {X509Certificate} from 'node:crypto';
+import {rootCertificates} from 'node:tls';
 import {Client} from 'basic-ftp';
 import {readdir,readFile} from 'node:fs/promises';
 import {resolve,relative} from 'node:path';
 import {pathToFileURL} from 'node:url';
+export function hostidoTlsOptions(){
+ const certificates=readFileSync(new URL('./certificates/hostido-intermediates.pem',import.meta.url),'utf8').match(/-----BEGIN CERTIFICATE-----[\s\S]+?-----END CERTIFICATE-----/g);
+ const [intermediate,cross]=certificates.map(pem=>new X509Certificate(pem));
+ const trusted=rootCertificates.some(pem=>cross.verify(new X509Certificate(pem).publicKey));
+ if(!trusted||!intermediate.verify(cross.publicKey)||[intermediate,cross].some(c=>Date.now()<Date.parse(c.validFrom)||Date.now()>Date.parse(c.validTo)))throw new Error('Hostido intermediate CA chain must be refreshed from Let\'s Encrypt.');
+ return {rejectUnauthorized:true,minVersion:'TLSv1.2',servername:'host150631.hostido.net.pl',ca:[...rootCertificates,...certificates]};
+}
 export function hostidoConfig(env=process.env){
  const user=env.HOSTIDO_FTP_USERNAME,password=env.HOSTIDO_FTP_PASSWORD;
  if(!user||!password)throw new Error('Add HOSTIDO_FTP_USERNAME and HOSTIDO_FTP_PASSWORD in repository Actions secrets. Use an FTP account restricted to the domain public_html directory.');
- return {host:'host150631.hostido.net.pl',port:21,user,password,secure:true,secureOptions:{rejectUnauthorized:true,minVersion:'TLSv1.2'}};
+ return {host:'host150631.hostido.net.pl',port:21,user,password,secure:true,secureOptions:hostidoTlsOptions()};
 }
 export async function deployHostido({directory='dist',env=process.env,client=new Client(60000)}={}){
  try{
@@ -28,5 +38,5 @@ export async function deployHostido({directory='dist',env=process.env,client=new
  }finally{client.close();}
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(resolve(process.argv[1])).href){
- deployHostido().catch(()=>{console.error('Hostido deployment failed. Check Actions secrets, the FTP account directory, TLS certificate and connection. Credentials are not logged.');process.exitCode=1;});
+ deployHostido().catch(error=>{const code=String(error?.code||'UNKNOWN');console.error(`Hostido error code: ${/^(?:[0-9]{3}|[A-Z_]{2,60})$/.test(code)?code:'UNKNOWN'}`);console.error('Hostido deployment failed. Check Actions secrets, the FTP account directory, TLS certificate and connection. Credentials are not logged.');process.exitCode=1;});
 }

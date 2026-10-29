@@ -74,3 +74,11 @@ Brak sekretów powoduje błąd zadania Hostido; po ich uzupełnieniu ponów to z
 Po transferze workflow sprawdza stronę główną i angielskie CV po HTTPS.
 Dotychczasowy adres GitHub Pages pozostaje adresem kanonicznym; domena `.eu`
 jest drugim miejscem publikacji. Analytics działa na obu adresach po zgodzie.
+
+Hostido nie wysyła pełnego łańcucha CA dla FTPS. Plik
+`scripts/certificates/hostido-intermediates.pem` zawiera publiczne certyfikaty
+[YR1 i Root YR podpisany przez ISRG Root X1](https://letsencrypt.org/certificates/).
+Uploader sprawdza ich podpisy względem wbudowanego magazynu zaufania Node.js
+oraz okres ważności, a następnie używa ich do uzupełnienia łańcucha TLS.
+Weryfikacja nazwy serwera i certyfikatu pozostaje włączona. Przy zmianie
+łańcucha po stronie Hostido odśwież ten plik z oficjalnych źródeł Let's Encrypt.
