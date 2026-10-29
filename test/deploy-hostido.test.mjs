@@ -15,9 +15,10 @@ test('Hostido uploads only the built artifact, preserves remote files and publis
   const expected=['index.html','src/app.mjs','public/cv/Patryk-Choinski-CV.pdf','public/cv/Patryk-Choinski-CV-EN.pdf','.nojekyll'];
   for(const file of expected){await mkdir(resolve(root,file,'..'),{recursive:true});await writeFile(resolve(root,file),'test');}
   const uploads=[],calls=[];
-  const client={ftp:{},access:async config=>calls.push(config),cd:async path=>calls.push(path),ensureDir:async path=>calls.push(path),uploadFrom:async(local,remote)=>uploads.push({local,remote}),close:()=>calls.push('closed')};
+  const client={ftp:{},list:async()=>[{name:'cgi-bin'}],access:async config=>calls.push(config),cd:async path=>calls.push(path),ensureDir:async path=>calls.push(path),uploadFrom:async(local,remote)=>uploads.push({local,remote}),close:()=>calls.push('closed')};
   await deployHostido({directory:root,env,client});
   assert.deepEqual(uploads.map(f=>f.remote).sort(),expected.sort());assert.equal(uploads.at(-1).remote,'index.html');assert.ok(uploads.every(f=>f.local.startsWith(root+sep)));assert.equal(calls.at(-1),'closed');
+  const broad={...client,list:async()=>[{name:'domains'}],uploadFrom:async()=>assert.fail('Must not upload into hosting account root')};await assert.rejects(deployHostido({directory:root,env,client:broad}),{code:'HOSTIDO_DIRECTORY'});
   let closed=false;await assert.rejects(deployHostido({directory:root,env:{},client:{close:()=>closed=true}}),/Actions secrets/);assert.equal(closed,true);
  }finally{assert.ok(root.startsWith(resolve(tmpdir())+sep+'portfolio-hostido-'));await rm(root,{recursive:true,force:true});}
 });

@@ -28,6 +28,8 @@ export async function deployHostido({directory='dist',env=process.env,client=new
   uploads.sort((a,b)=>Number(a.remote==='index.html')-Number(b.remote==='index.html')||a.remote.localeCompare(b.remote));
   client.ftp.verbose=false;
   await client.access(config);await client.cd('/');
+  const entries=await client.list();
+  if(entries.some(entry=>['domains','imap','Maildir','public_html','public_ftp'].includes(entry.name)))throw Object.assign(new Error('FTP account must be restricted to the domain public_html directory.'),{code:'HOSTIDO_DIRECTORY'});
   const created=new Set();
   for(const file of uploads){
    const parts=file.remote.split('/');parts.pop();const folder=parts.join('/');
