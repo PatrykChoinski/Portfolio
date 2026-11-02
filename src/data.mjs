@@ -107,6 +107,7 @@ export const pipelineRuns = [{"number":21,"date":"2026-09-22T10:19:42Z","url":"h
 ;
 
 export const site = {
+ adsensePublisherId:'ca-pub-9817885926030024',
  url:'https://patrykchoinski.github.io/Portfolio/',
  additionalUrls:['https://patrykchoinski.eu/'],
  title:'Patryk Choiński | Automatyka przemysłowa | PLC · HMI · Motion',

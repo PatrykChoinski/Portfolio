@@ -8,6 +8,8 @@ import {createStaticServer} from './serve.mjs';
 import {chromium} from '@playwright/test';
 import {browserChannel} from './browser.mjs';
 await mkdir('dist', {recursive:true});
+if(!/^ca-pub-\d{16}$/.test(site.adsensePublisherId))throw new Error('Invalid AdSense publisher ID');
+await writeFile('dist/ads.txt',`google.com, ${site.adsensePublisherId.replace('ca-','')}, DIRECT, f08c47fec0942fa0\n`);
 await cp('index.html','dist/index.html');
 await cp('hosting/.htaccess','dist/.htaccess');
 await cp('src','dist/src',{recursive:true});
