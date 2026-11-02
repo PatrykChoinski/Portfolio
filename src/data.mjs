@@ -178,3 +178,13 @@ export const cvEnglish = {
  ].map(([group,items],index)=>({group,items,area:skills[index].area})),
  projects:projects.map(p=>({id:p.id,...englishProjectContent[p.id]}))
 };
+
+// Enable only after the Google-certified consent message is published.
+export const advertising = {
+ enabled:false,
+ consentMessagePublished:false,
+ publisherId:'ca-pub-9817885926030024',
+ origin:'https://patrykchoinski.eu',
+ label:'Reklama',
+ slots:[{side:'left',id:'2718183083'},{side:'right',id:'7967087440'}]
+};

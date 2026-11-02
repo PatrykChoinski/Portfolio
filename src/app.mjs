@@ -1,3 +1,4 @@
+import {initAds} from './ads.mjs';
 import {initContactLinks} from './contact-links.mjs';
 import {initGithubActivity} from './github-activity.mjs';
 import {initControlSystem} from './control-system.mjs';
@@ -58,3 +59,5 @@ initControlSystem();
 await initGithubActivity();
 document.querySelectorAll('a[href="https://github.com/PatrykChoinski"]:not(.header-contacts a)').forEach(link=>link.classList.add('github-cta'));
 initAnalytics();
+
+initAds();
