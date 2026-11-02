@@ -11,3 +11,14 @@ test('side banner preview fits desktop, scrolls out and stays hidden on smaller 
  expect(adRequests).toEqual([]);
  await page.goto('/');await expect(page.locator('.ad-rail')).toHaveCount(0);
 });
+
+test('active AdSense loads once on desktop and exposes Google consent settings',async({page})=>{
+ let loads=0;
+ await page.route('https://pagead2.googlesyndication.com/**',async route=>{loads++;await route.fulfill({contentType:'text/javascript',body:`window.adPushes=0;window.adsbygoogle={push(){window.adPushes++}};window.googlefc.showRevocationMessage=()=>window.reopened=true;for(const entry of window.googlefc.callbackQueue)entry.CONSENT_API_READY?.();window.googlefc.callbackQueue={push(entry){entry.CONSENT_API_READY?.();}};`});});
+ await page.setViewportSize({width:1280,height:900});await page.goto('/');
+ await page.evaluate(async()=>{const {initAds}=await import('./src/ads.mjs');const {advertising}=await import('./src/data.mjs');initAds({...advertising,origin:location.origin});});
+ expect(loads).toBe(0);
+ await page.setViewportSize({width:1920,height:900});await expect.poll(()=>page.evaluate(()=>window.adPushes)).toBe(2);
+ await page.getByRole('button',{name:'Ustawienia reklam',exact:true}).click();expect(await page.evaluate(()=>window.reopened)).toBe(true);
+ await page.setViewportSize({width:1280,height:900});await page.setViewportSize({width:1920,height:900});expect(loads).toBe(1);expect(await page.evaluate(()=>window.adPushes)).toBe(2);
+});

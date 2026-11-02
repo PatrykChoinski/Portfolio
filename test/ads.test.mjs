@@ -4,7 +4,7 @@ import {adsEnabled} from '../src/ads.mjs';
 import {advertising} from '../src/data.mjs';
 test('AdSense stays off until CMP publication and accepts only the approved origin',()=>{
  const production={origin:advertising.origin};
- assert.equal(adsEnabled(advertising,production),false);
+ assert.equal(adsEnabled({...advertising,enabled:false},production),false);
  const ready={...advertising,enabled:true,consentMessagePublished:true};
  assert.equal(adsEnabled(ready,production),true);
  for(const origin of ['http://localhost:4173','https://patrykchoinski.github.io','https://patrykchoinski.eu.example.com'])assert.equal(adsEnabled(ready,{origin}),false);

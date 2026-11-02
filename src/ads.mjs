@@ -16,6 +16,11 @@ export function initAds(config=advertising){
   document.body.append(rail);
  }
  if(preview)return;
+ const settings=document.createElement('button');settings.type='button';settings.textContent='Ustawienia reklam';settings.hidden=true;
+ settings.addEventListener('click',()=>window.googlefc.callbackQueue.push({CONSENT_API_READY:()=>window.googlefc.showRevocationMessage()}));
+ document.querySelector('footer')?.append(settings);
+ window.googlefc=window.googlefc||{};window.googlefc.callbackQueue=window.googlefc.callbackQueue||[];
+ window.googlefc.callbackQueue.push({CONSENT_API_READY:()=>{settings.hidden=false;}});
  // Request each unit once, only when desktop space exists. Never auto-refresh ads.
  const desktop=matchMedia('(min-width: 1720px)');let requested=false;
  const start=()=>{

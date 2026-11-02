@@ -19,7 +19,7 @@ export function initAnalytics(config=site){
  function start(){
   if(!enabled||consent!=='granted'||started)return;
   started=true;window[`ga-disable-${config.measurementId}`]=false;
-  window.gtag('consent','update',{analytics_storage:'granted',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied'});
+  window.gtag('consent','update',{analytics_storage:'granted'});
   window.gtag('js',new Date());
   let referrer='';try{referrer=new URL(document.referrer).origin+'/';}catch{}
   window.gtag('config',config.measurementId,{send_page_view:false,allow_google_signals:false,allow_ad_personalization_signals:false,page_location:config.url,page_referrer:referrer,...safeCampaign(location.search)});

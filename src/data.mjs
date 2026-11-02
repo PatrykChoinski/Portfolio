@@ -181,8 +181,8 @@ export const cvEnglish = {
 
 // Enable only after the Google-certified consent message is published.
 export const advertising = {
- enabled:false,
- consentMessagePublished:false,
+ enabled:true,
+ consentMessagePublished:true,
  publisherId:'ca-pub-9817885926030024',
  origin:'https://patrykchoinski.eu',
  label:'Reklama',

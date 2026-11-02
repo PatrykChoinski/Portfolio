@@ -106,6 +106,6 @@ sprawdza widok 3D i rzeczywiste wykonanie symulowanego cięcia bez żądań do A
 
 ### Boczne reklamy AdSense
 
-Dwie jednostki 160 × 600 są zdefiniowane w `src/data.mjs` (`advertising`). Reklamy pozostają wyłączone do opublikowania certyfikowanego komunikatu zgód Google dla domeny patrykchoinski.eu i uzupełnienia informacji o reklamach w polityce prywatności. Dopiero wtedy ustaw `consentMessagePublished` i `enabled` na `true`. Nie zastępuj zgód reklamowych zgodą Analytics.
+Dwie jednostki 160 × 600 są zdefiniowane w `src/data.mjs` (`advertising`). Właściciel potwierdził opublikowanie komunikatu zgód Google; `consentMessagePublished` i `enabled` są włączone. Polityka prywatności opisuje AdSense. Przy wycofaniu komunikatu wyłącz oba ustawienia. Nie zastępuj zgód reklamowych zgodą Analytics.
 
 Podgląd bez połączeń reklamowych: `http://127.0.0.1:4173/?ads-preview=1`, szerokość minimum 1720 px. Banery przewijają się ze stroną, nie są przyklejone do ekranu (AdSense nie dopuszcza dwóch równoległych jednostek sticky). Na mniejszych ekranach są ukryte. Kod reklam uruchamia się wyłącznie na domenie produkcyjnej; nie na localhost ani kopii GitHub Pages. Nie klikaj własnych reklam.
